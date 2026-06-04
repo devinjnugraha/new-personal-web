@@ -29,7 +29,7 @@ Built with Next.js 15, deployed on Vercel.
 ### Prerequisites
 
 - Node.js ≥ 20
-- pnpm ≥ 9
+- npm
 
 ### Setup
 
@@ -39,14 +39,14 @@ git clone https://github.com/devinjnugraha/new-personal-web.git
 cd new-personal-web
 
 # 2. Install dependencies
-pnpm install
+npm install
 
 # 3. Configure environment
 cp .env.local.example .env.local
-# Fill in OPENROUTER_API_KEY, CHAT_MODEL, KV_REST_API_URL, KV_REST_API_TOKEN
+# Fill in OPENROUTER_API_KEY, CHAT_MODEL
 
 # 4. Run dev server (Turbopack)
-pnpm dev
+npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
@@ -57,8 +57,6 @@ Open [http://localhost:3000](http://localhost:3000).
 | -------------------- | ----------------------------------------------- |
 | `OPENROUTER_API_KEY` | OpenRouter API key                              |
 | `CHAT_MODEL`         | Model string, e.g. `anthropic/claude-haiku-4-5` |
-| `KV_REST_API_URL`    | Vercel KV URL for rate limiting                 |
-| `KV_REST_API_TOKEN`  | Vercel KV token                                 |
 
 See `.env.local.example` for the full template.
 

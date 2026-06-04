@@ -11,9 +11,9 @@
 
 ## Purpose
 
-An inline LLM chat interface embedded in the portfolio page. Visitors can ask Devin
-questions and get answers from an AI trained on his background. This is NOT a popup
-widget — it lives as a full section on the page.
+An inline LLM chat interface embedded in the portfolio page. Visitors can ask questions
+about Devin and get answers from his personal assistant, powered by an LLM knowledge base.
+This is NOT a popup widget — it lives as a full section on the page.
 
 ---
 
@@ -45,7 +45,7 @@ Powered by an LLM trained on my background. Answers may be imperfect.
 | ID | Requirement |
 |---|---|
 | CI-01 | Section label: `06 / ask devin` |
-| CI-02 | Subtitle: `"Powered by an LLM trained on my background."` + muted span `"Answers may be imperfect."` — `text-ink-muted text-sm mb-6` |
+| CI-02 | Subtitle: `"Devin's personal assistant, powered by an LLM."` + muted span `"Only answers from the knowledge base."` — `text-ink-muted text-sm mb-6` |
 | CI-03 | Chat container: `border border-border rounded-lg bg-background-surface overflow-hidden` |
 
 ### Message List
@@ -63,7 +63,7 @@ Powered by an LLM trained on my background. Answers may be imperfect.
 | ID | Requirement |
 |---|---|
 | CI-09 | Show 4 starter prompt buttons when `messages.length === 0` |
-| CI-10 | Starter prompts: "Tell me about your ML research", "What tech stack do you work with?", "What are you currently working on?", "Tell me about your glaucoma detection paper" |
+| CI-10 | Starter prompts: "Tell me about Devin's ML research", "What tech stack does Devin work with?", "What are Devin's certifications?", "Tell me about Devin's glaucoma detection paper" |
 | CI-11 | Button style: `text-xs font-mono text-ink-muted border border-border px-3 py-1.5 rounded hover:border-accent hover:text-accent transition-colors` |
 | CI-12 | Clicking a starter prompt populates the input AND submits immediately |
 
@@ -90,7 +90,7 @@ Powered by an LLM trained on my background. Answers may be imperfect.
 | CI-19 | Input + button separated from message list by `border-t border-border` |
 | CI-20 | `<form>` with `onSubmit={handleSubmit}` |
 | CI-21 | Input: `flex-1 bg-transparent px-4 py-3 text-sm text-ink placeholder-ink-faint outline-none font-mono` |
-| CI-22 | Input placeholder: `"Ask anything about my background..."` |
+| CI-22 | Input placeholder: `"Ask anything about Devin..."` |
 | CI-23 | Input disabled when `isLoading === true` |
 | CI-24 | Send button: `"send →"` — `font-mono text-sm text-accent border-l border-border px-4` |
 | CI-25 | Send button disabled when `isLoading` OR `input.trim()` is empty |

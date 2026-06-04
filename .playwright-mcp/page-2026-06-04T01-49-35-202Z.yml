@@ -1,0 +1,222 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - navigation [ref=e3]:
+      - link "DJN" [ref=e4] [cursor=pointer]:
+        - /url: "#hero"
+      - list [ref=e5]:
+        - listitem [ref=e6]:
+          - link "01 about" [ref=e7] [cursor=pointer]:
+            - /url: "#about"
+        - listitem [ref=e8]:
+          - link "02 education" [ref=e9] [cursor=pointer]:
+            - /url: "#education"
+        - listitem [ref=e10]:
+          - link "03 experience" [ref=e11] [cursor=pointer]:
+            - /url: "#experience"
+        - listitem [ref=e12]:
+          - link "04 certs" [ref=e13] [cursor=pointer]:
+            - /url: "#certifications"
+        - listitem [ref=e14]:
+          - link "05 writing" [ref=e15] [cursor=pointer]:
+            - /url: "#writing"
+        - listitem [ref=e16]:
+          - link "06 ask" [ref=e17] [cursor=pointer]:
+            - /url: "#chat"
+  - main [ref=e18]:
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - paragraph [ref=e21]: // hello, world
+        - heading "Devin Jaya Nugraha" [level=1] [ref=e22]: Devin Jaya Nugraha_
+        - paragraph [ref=e23]: Software Developer · Certified TensorFlow Developer
+        - paragraph [ref=e24]: I'm a software developer with a passion for intelligent computing and data-driven systems. My background spans ML research — including a published paper on CNN optimization for medical imaging — and full-stack web development. I graduated from Brawijaya University in 3.5 years and have since been working at the intersection of software engineering and applied machine learning.
+        - generic [ref=e25]:
+          - link "github →" [ref=e26] [cursor=pointer]:
+            - /url: https://github.com/devinjnugraha
+          - link "linkedin →" [ref=e27] [cursor=pointer]:
+            - /url: https://linkedin.com/in/devinjnugraha
+          - link "download cv →" [ref=e28] [cursor=pointer]:
+            - /url: /cv.pdf
+          - link "email →" [ref=e29] [cursor=pointer]:
+            - /url: mailto:devinjn123@gmail.com
+      - generic [ref=e31]: ↓ scroll
+    - generic [ref=e32]:
+      - paragraph [ref=e33]: 01 / about
+      - paragraph [ref=e34]: I'm a software developer with a passion for intelligent computing and data-driven systems. My background spans ML research — including a published paper on CNN optimization for medical imaging — and full-stack web development. I graduated from Brawijaya University in 3.5 years and have since been working at the intersection of software engineering and applied machine learning.
+      - paragraph [ref=e35]: skills
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - paragraph [ref=e38]: Languages
+          - generic [ref=e39]:
+            - generic [ref=e40]: Python
+            - generic [ref=e41]: TypeScript
+            - generic [ref=e42]: JavaScript
+            - generic [ref=e43]: Java
+        - generic [ref=e44]:
+          - paragraph [ref=e45]: Frontend
+          - generic [ref=e46]:
+            - generic [ref=e47]: React
+            - generic [ref=e48]: Next.js
+            - generic [ref=e49]: Tailwind CSS
+            - generic [ref=e50]: HTML/CSS
+        - generic [ref=e51]:
+          - paragraph [ref=e52]: Backend
+          - generic [ref=e53]:
+            - generic [ref=e54]: Spring Boot
+            - generic [ref=e55]: Node.js
+            - generic [ref=e56]: REST APIs
+        - generic [ref=e57]:
+          - paragraph [ref=e58]: ML / AI
+          - generic [ref=e59]:
+            - generic [ref=e60]: TensorFlow
+            - generic [ref=e61]: PyTorch
+            - generic [ref=e62]: Scikit-learn
+            - generic [ref=e63]: CNN
+            - generic [ref=e64]: NLP
+            - generic [ref=e65]: Grad-CAM
+        - generic [ref=e66]:
+          - paragraph [ref=e67]: Data
+          - generic [ref=e68]:
+            - generic [ref=e69]: Pandas
+            - generic [ref=e70]: NumPy
+            - generic [ref=e71]: Matplotlib
+            - generic [ref=e72]: SQL
+        - generic [ref=e73]:
+          - paragraph [ref=e74]: Tools
+          - generic [ref=e75]:
+            - generic [ref=e76]: Git
+            - generic [ref=e77]: Docker
+            - generic [ref=e78]: Vercel
+            - generic [ref=e79]: Google Cloud
+            - generic [ref=e80]: Jupyter
+    - generic [ref=e81]:
+      - paragraph [ref=e82]: 02 / education
+      - generic [ref=e83]:
+        - generic [ref=e84]:
+          - generic [ref=e85]:
+            - heading "Brawijaya University" [level=3] [ref=e86]
+            - paragraph [ref=e87]: Bachelor of Computer Science · Informatics Engineering
+          - generic [ref=e88]: Completed in 3.5 years
+        - paragraph [ref=e89]: 2020–2023 · Malang, East Java, Indonesia
+        - paragraph [ref=e90]: Very Satisfactory (Memuaskan)
+        - generic [ref=e91]:
+          - paragraph [ref=e92]: Thesis
+          - paragraph [ref=e93]: Optimizing Convolutional Neural Network Using Weighted Loss for Glaucoma Detection
+          - paragraph [ref=e94]: Proposed weighted loss application in CNN to detect glaucoma on the imbalanced SMDG-19 fundus image dataset, demonstrating improved recall and F1-score over standard cross-entropy loss.
+    - generic [ref=e95]:
+      - paragraph [ref=e96]: 03 / experience
+      - generic [ref=e97]:
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - generic [ref=e103]:
+              - paragraph [ref=e104]: Practicum Assistant — Basic Programming
+              - paragraph [ref=e105]: Brawijaya University
+            - paragraph [ref=e106]: Mar 2021 – Jun 2022
+          - list [ref=e107]:
+            - listitem [ref=e108]:
+              - generic [ref=e109]: ›
+              - text: Led weekly lab sessions for 37 undergraduate students
+            - listitem [ref=e110]:
+              - generic [ref=e111]: ›
+              - text: "Topics: Java I/O, data types, conditionals, loops, arrays, methods"
+            - listitem [ref=e112]:
+              - generic [ref=e113]: ›
+              - text: Prepared lab materials and graded weekly assignments
+          - generic [ref=e114]:
+            - generic [ref=e115]: Java
+            - generic [ref=e116]: Teaching
+            - generic [ref=e117]: Curriculum Design
+        - generic [ref=e120]:
+          - generic [ref=e121]:
+            - generic [ref=e122]:
+              - paragraph [ref=e123]: Deputy Head of Information Technology
+              - paragraph [ref=e124]: Eksekutif Mahasiswa Informatika (EMI)
+            - paragraph [ref=e125]: Mar 2022 – Mar 2023
+          - list [ref=e126]:
+            - listitem [ref=e127]:
+              - generic [ref=e128]: ›
+              - text: Managed IT department operations and member coordination
+            - listitem [ref=e129]:
+              - generic [ref=e130]: ›
+              - text: Oversaw digital communications and internal systems
+            - listitem [ref=e131]:
+              - generic [ref=e132]: ›
+              - text: Organized technology-related student events
+          - generic [ref=e133]:
+            - generic [ref=e134]: Leadership
+            - generic [ref=e135]: Project Management
+            - generic [ref=e136]: Team Coordination
+    - generic [ref=e137]:
+      - paragraph [ref=e138]: 04 / certifications & achievements
+      - paragraph [ref=e139]: certifications
+      - generic [ref=e140]:
+        - generic [ref=e141]:
+          - paragraph [ref=e142]: TensorFlow Developer Certificate
+          - paragraph [ref=e143]: Google / TensorFlow · 2023
+          - generic [ref=e144]:
+            - generic [ref=e145]: TensorFlow
+            - generic [ref=e146]: Deep Learning
+            - generic [ref=e147]: CNN
+        - generic [ref=e148]:
+          - paragraph [ref=e149]: Google Data Analytics Certificate
+          - paragraph [ref=e150]: Google · 2022
+          - generic [ref=e151]:
+            - generic [ref=e152]: Data Analysis
+            - generic [ref=e153]: SQL
+            - generic [ref=e154]: R
+        - generic [ref=e155]:
+          - paragraph [ref=e156]: Google IT Automation with Python
+          - paragraph [ref=e157]: Google · 2022
+          - generic [ref=e158]:
+            - generic [ref=e159]: Python
+            - generic [ref=e160]: Automation
+            - generic [ref=e161]: Git
+      - paragraph [ref=e162]: achievements
+      - generic [ref=e163]:
+        - generic [ref=e164]:
+          - generic [ref=e165]: ★
+          - generic [ref=e166]:
+            - paragraph [ref=e167]: 7th Place — ISFEST UMN 2023 Data Competition
+            - paragraph [ref=e168]: Placed 7th in a national data science competition focused on predicting house prices in the Greater Jakarta area (Jabodetabek).
+            - paragraph [ref=e169]: "2023"
+        - generic [ref=e170]:
+          - generic [ref=e171]: ◆
+          - generic [ref=e172]:
+            - paragraph [ref=e173]: Graduated in 3.5 Years with Very Satisfactory Standing
+            - paragraph [ref=e174]: Completed a 4-year Computer Science program at Brawijaya University in 3.5 years.
+            - paragraph [ref=e175]: "2023"
+    - generic [ref=e176]:
+      - paragraph [ref=e177]: 05 / writing & research
+      - paragraph [ref=e178]: research
+      - generic [ref=e179]:
+        - generic [ref=e180]:
+          - generic [ref=e181]: Q1
+          - generic [ref=e182]: Computers in Biology and Medicine
+          - generic [ref=e183]: ·
+          - generic [ref=e184]: Elsevier / ScienceDirect
+        - 'heading "Weighted loss for imbalanced glaucoma detection: Insights from visual explanations" [level=3] [ref=e185]'
+        - paragraph [ref=e186]: Devin Jaya Nugraha, Novanto Yudistira, Agus Wahyu Widodo
+        - paragraph [ref=e187]: "My contribution: Visualization, Software, Investigation, Data Curation"
+        - paragraph [ref=e188]: This study evaluated four deep learning architectures on nine glaucoma-related datasets to assess the effectiveness of weighted loss functions in improving detection of underrepresented classes. Weighted loss improved recall and F1-score compared to standard cross-entropy and focal loss.
+        - link "View on ScienceDirect →" [ref=e189] [cursor=pointer]:
+          - /url: https://www.sciencedirect.com/science/article/abs/pii/S0010482525012260
+      - paragraph [ref=e190]: writings
+      - link "linkedin LinkedIn Profile & Posts Professional updates, project write-ups, and reflections." [ref=e192] [cursor=pointer]:
+        - /url: https://linkedin.com/in/devinjnugraha
+        - generic [ref=e193]: linkedin
+        - generic [ref=e194]:
+          - paragraph [ref=e195]: LinkedIn Profile & Posts
+          - paragraph [ref=e196]: Professional updates, project write-ups, and reflections.
+    - generic [ref=e197]:
+      - paragraph [ref=e198]: 06 / ask devin
+      - paragraph [ref=e199]: Powered by an LLM trained on my background. Answers may be imperfect.
+      - generic [ref=e200]:
+        - generic [ref=e202]:
+          - button "Tell me about your ML research" [ref=e203] [cursor=pointer]
+          - button "What tech stack do you work with?" [ref=e204] [cursor=pointer]
+          - button "What are you currently working on?" [ref=e205] [cursor=pointer]
+          - button "Tell me about your glaucoma detection paper" [ref=e206] [cursor=pointer]
+        - generic [ref=e207]:
+          - textbox "Ask anything about my background..." [ref=e208]
+          - button "send →" [disabled] [ref=e209]
+  - contentinfo [ref=e210]:
+    - paragraph [ref=e211]: © 2026 Devin Jaya Nugraha

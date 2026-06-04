@@ -17,20 +17,79 @@ an AI representative of Devin, answering visitor questions about his background.
 
 ---
 
+## AI-DLC Methodology (MANDATORY)
+
+The **Artificial Intelligence Development Life Cycle (AI-DLC)** is the mandatory workflow that ALL agents
+MUST follow when building any new feature or making non-trivial changes in this codebase. AI transitions
+from a passive autocomplete tool into an active process orchestrator within a circular human-in-the-loop
+validation model.
+
+**The lifecycle progresses linearly through four phases. EVERY phase must be completed before proceeding.**
+
+```
+[Specs] ──► [Design] ──► [Task List] ──► [Define & Code]
+```
+
+### Phase 1: Specs (Requirements)
+
+Process the natural language request and auto-generate:
+- **Agile user stories** — "As a [user], I want [goal] so that [benefit]"
+- **Strict Given-When-Then acceptance criteria** — each story must have testable, unambiguous conditions
+
+Output is a written spec (add to `docs/specs/` if a new feature, or reference existing SPEC file).
+
+### Phase 2: Design
+
+Translate requirements into:
+- **Software entity relationships** — data models, type definitions, interfaces
+- **Service classes and module responsibilities** — which components handle what
+- **Architecture schemas** — component hierarchy, API contracts, data flow diagrams
+
+Output is a written design document with clear file paths and type signatures.
+
+### Phase 3: Task List
+
+Decompose the design into discrete, ordered development tasks:
+- Each task is a single, completable unit of work (one file, one function, one component)
+- Tasks are numbered and sequenced with explicit dependencies
+- Each task links back to the acceptance criteria it satisfies
+- Tasks are tracked and checked off before proceeding to the next
+
+Output is a numbered task list that the agent follows sequentially.
+
+### Phase 4: Define & Code
+
+Execute implementation under developer supervision:
+- Write code that satisfies the task requirements
+- Generate type definitions, component code, API routes, and configurations
+- Provision or configure infrastructure as needed
+- Run `npm run type-check` and `npm run build` to validate after each logical group of changes
+- The human reviews and validates each phase gate before the agent proceeds
+
+### Compliance Rules
+
+1. **NEVER skip phases.** Even for small features, produce a minimal spec and task list before coding.
+2. **NEVER write code before completing Phase 1–3.** The agent must have written requirements and a task list before any file is created or modified.
+3. **Human-in-the-loop validation is required** at every phase gate. The agent presents its output and waits for approval before advancing.
+4. **If requirements change mid-cycle**, restart from Phase 1 with the updated understanding.
+5. **This methodology applies to ALL new feature work**, regardless of size. Bug fixes may skip to Phase 4 if the fix is trivial (single-line change), but must still be documented.
+
+---
+
 ## Tech Stack
 
-| Layer         | Choice                                         | Version   |
-| ------------- | ---------------------------------------------- | --------- |
-| Framework     | Next.js (App Router)                           | `^15.0.0` |
-| Language      | TypeScript                                     | `^5.0.0`  |
-| Runtime       | React                                          | `^19.0.0` |
-| Styling       | Tailwind CSS                                   | `^3.4.0`  |
-| Animation     | Motion (Framer Motion)                         | `^11.0.0` |
-| AI/Chat       | Vercel AI SDK                                  | `^4.0.0`  |
-| LLM Provider  | OpenRouter via `@ai-sdk/openai`                | `^1.0.0`  |
-| Analytics     | `@vercel/analytics` + `@vercel/speed-insights` | latest    |
-| Rate Limiting | `@vercel/kv`                                   | `^3.0.0`  |
-| Deployment    | Vercel                                         | —         |
+| Layer          | Choice                                         | Version    |
+| -------------- | ---------------------------------------------- | ---------- |
+| Framework      | Next.js (App Router)                           | `^15.5.19` |
+| Language       | TypeScript                                     | `^5.0.0`   |
+| Runtime        | React                                          | `^19.0.0`  |
+| Styling        | Tailwind CSS                                   | `^3.4.0`   |
+| Animation      | Motion (Framer Motion)                         | `^11.0.0`  |
+| AI/Chat        | Vercel AI SDK (`ai`)                           | `^6.0.195` |
+| AI/Chat React  | Vercel AI SDK React (`@ai-sdk/react`)          | `^3.0.197` |
+| LLM Provider   | OpenRouter via `@ai-sdk/openai`                | `^3.0.67`  |
+| Analytics      | `@vercel/analytics` + `@vercel/speed-insights` | latest     |
+| Deployment     | Vercel                                         | —          |
 
 ---
 
@@ -215,10 +274,10 @@ import { motion } from "motion/react";
 - Streaming: Use `streamText` from `ai` and return `result.toDataStreamResponse()`
 - Provider: OpenRouter via `createOpenAI` with custom `baseURL`
 - Model: Controlled by `process.env.CHAT_MODEL` env var (never hardcoded)
-- Rate limit: Check IP against Vercel KV before calling LLM. Limit: 20 messages/hour/IP.
+- Rate limit: Planned — not yet implemented (no `@vercel/kv` dependency installed).
 - System prompt: Lives in `src/app/api/chat/route.ts` as a `SYSTEM_PROMPT` constant.
 - The system prompt MUST be factually accurate — see `src/data/portfolio.ts` for source of truth.
-- Frontend: `useChat({ api: '/api/chat' })` from `ai/react`. Never manually handle streaming.
+- Frontend: `useChat({ api: '/api/chat' })` from `@ai-sdk/react`. Never manually handle streaming.
 
 ---
 
@@ -229,9 +288,7 @@ All secrets are server-side only. None are prefixed with `NEXT_PUBLIC_`.
 | Variable             | Required | Description                                    |
 | -------------------- | -------- | ---------------------------------------------- |
 | `OPENROUTER_API_KEY` | Yes      | OpenRouter API key                             |
-| `CHAT_MODEL`         | Yes      | Model string e.g. `anthropic/claude-haiku-4-5` |
-| `KV_REST_API_URL`    | Yes      | Vercel KV endpoint for rate limiting           |
-| `KV_REST_API_TOKEN`  | Yes      | Vercel KV auth token                           |
+| `CHAT_MODEL`         | Yes      | Model string e.g. `anthropic/claude-sonnet-4-6` |
 
 See `.env.local.example` for template.
 
@@ -272,11 +329,11 @@ import type { Experience } from "@/types";
 ## Build & Dev Commands
 
 ```bash
-pnpm install          # install deps
-pnpm dev              # start dev server with Turbopack
-pnpm build            # production build
-pnpm type-check       # run tsc --noEmit without building
-pnpm lint             # run ESLint
+npm install          # install deps
+npm run dev          # start dev server with Turbopack
+npm run build        # production build
+npm run type-check   # run tsc --noEmit without building
+npm run lint         # run ESLint
 ```
 
 ---

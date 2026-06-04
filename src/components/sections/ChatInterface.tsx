@@ -1,130 +1,316 @@
-'use client'
+"use client";
 
 // SPEC: docs/specs/SPEC-009-chat-interface.md
 // Type: Client Component — requires useChat hook
 
-import { useChat } from 'ai/react'
-import { track } from '@vercel/analytics'
-import { useRef, useEffect } from 'react'
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
+import type { UIMessage } from "ai";
+import { track } from "@vercel/analytics";
+import { useRef, useEffect, useState, useCallback } from "react";
+import ReactMarkdown from "react-markdown";
+import { motion, AnimatePresence } from "motion/react";
+
+// Auto-link bare URLs in markdown text so ReactMarkdown renders them as <a>
+function autolinkMarkdown(text: string): string {
+    return text.replace(/(?<!\()(https?:\/\/[^\s)\]>]+)/g, "[$1]($1)");
+}
+
+function getMessageText(message: UIMessage): string {
+    return message.parts
+        .filter((p): p is Extract<typeof p, { type: "text" }> => p.type === "text")
+        .map((p) => p.text)
+        .join("");
+}
+
+// Custom fetch that intercepts injection refusals from the server
+// and converts them into a valid UI message stream so useChat renders them
+// Singleton transport — must be stable across renders so useChat
+// maintains correct message history in multi-turn conversations.
+const chatTransport = new DefaultChatTransport({ api: "/api/chat" });
 
 export function ChatInterface() {
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat({
-    api: '/api/chat',
-    onFinish: () => {
-      // Track successful chat interactions
-      track('chat_message_sent', { messageCount: messages.length })
-    },
-    onError: () => {
-      track('chat_error')
-    },
-  })
+    const { messages, sendMessage, status, error } = useChat({
+        transport: chatTransport,
+        onFinish: () => {
+            track("chat_message_sent", { messageCount: messages.length });
+        },
+        onError: () => {
+            track("chat_error");
+        },
+    });
 
-  const bottomRef = useRef<HTMLDivElement>(null)
+    const [input, setInput] = useState("");
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [animateOverlay, setAnimateOverlay] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const overlayRef = useRef<HTMLDivElement>(null);
+    const isLoading = status === "submitted" || status === "streaming";
 
-  // Auto-scroll to latest message
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    // Track chat_opened once on mount
+    useEffect(() => {
+        track("chat_opened");
+    }, []);
 
-  // TODO: Full implementation per SPEC-009
-  // Requirements:
-  //   - Inline section, NOT a modal/popup widget
-  //   - "Ask Devin" heading with disclaimer text below
-  //   - Message bubbles: user right-aligned, assistant left-aligned
-  //   - Typing indicator (animated dots) while isLoading
-  //   - Input field + send button at bottom
-  //   - Rate limit error displayed gracefully
-  //   - Starter prompts (suggested questions) when messages is empty
-  //   - Max height ~480px with internal scroll for message list
+    // Lock body scroll when expanded overlay is open
+    useEffect(() => {
+        if (isExpanded) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isExpanded]);
 
-  const starterPrompts = [
-    'Tell me about your ML research',
-    'What tech stack do you work with?',
-    'What are you currently working on?',
-    'Tell me about your glaucoma detection paper',
-  ]
+    // Enable CSS transition only after the overlay has mounted at its
+    // full size — prevents animating the initial appear / final disappear.
+    useEffect(() => {
+        if (isExpanded) {
+            setAnimateOverlay(false);
+            // Two rAF frames: first paints the overlay, second enables transition
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    setAnimateOverlay(true);
+                });
+            });
+        } else {
+            setAnimateOverlay(false);
+        }
+    }, [isExpanded]);
 
-  return (
-    <section id="chat" className="py-section border-t border-border">
-      <p className="section-label mb-2">06 / ask devin</p>
-      <p className="text-ink-muted text-sm mb-6">
-        Powered by an LLM trained on my background.{' '}
-        <span className="text-ink-faint">Answers may be imperfect.</span>
-      </p>
+    // Sync overlay dimensions to visualViewport so it shrinks
+    // when the keyboard opens instead of being pushed off-screen
+    useEffect(() => {
+        if (!isExpanded) return;
+        const vv = window.visualViewport;
+        if (!vv) return;
 
-      <div className="border border-border rounded-lg bg-background-surface overflow-hidden">
-        {/* Message list */}
-        <div className="h-80 overflow-y-auto p-4 space-y-4">
-          {messages.length === 0 && (
-            <div className="flex flex-wrap gap-2">
-              {starterPrompts.map((prompt) => (
-                <button
-                  key={prompt}
-                  onClick={() => {
-                    // TODO: Pre-fill input or submit directly
-                  }}
-                  className="text-xs font-mono text-ink-muted border border-border px-3 py-1.5 rounded hover:border-accent hover:text-accent transition-colors"
-                >
-                  {prompt}
-                </button>
-              ))}
-            </div>
-          )}
-          {messages.map((m) => (
-            <div
-              key={m.id}
-              className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+        const sync = () => {
+            requestAnimationFrame(() => {
+                const el = overlayRef.current;
+                if (!el) return;
+                el.style.height = `${vv.height}px`;
+                el.style.top = `${vv.offsetTop}px`;
+            });
+        };
+
+        vv.addEventListener("resize", sync);
+        vv.addEventListener("scroll", sync);
+        sync();
+
+        return () => {
+            vv.removeEventListener("resize", sync);
+            vv.removeEventListener("scroll", sync);
+        };
+    }, [isExpanded]);
+
+    // Auto-scroll to bottom when messages change
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
+    const starterPrompts = [
+        "Tell me about Devin's ML research",
+        "What tech stack does Devin work with?",
+        "What are Devin's certifications?",
+        "Tell me about Devin's glaucoma detection paper",
+    ];
+
+    const MAX_INPUT_LENGTH = 500;
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const text = input.trim();
+        if (!text || isLoading) return;
+        if (text.length > MAX_INPUT_LENGTH) return;
+        sendMessage({ text });
+        setInput("");
+        inputRef.current?.blur();
+    };
+
+    const handleStarterClick = (prompt: string) => {
+        if (isLoading) return;
+        if (window.innerWidth < 768) {
+            setIsExpanded(true);
+        }
+        sendMessage({ text: prompt });
+    };
+
+    const handleInputFocus = useCallback(() => {
+        if (window.innerWidth < 768) {
+            setIsExpanded(true);
+        }
+    }, []);
+
+    const handleClose = () => {
+        setIsExpanded(false);
+        inputRef.current?.blur();
+    };
+
+    // Shared message list content
+    const renderMessages = (padTop = false) => (
+        <>
+            {messages.length === 0 && (
+                <div className={`flex flex-wrap gap-2 ${padTop ? "pt-8" : ""}`}>
+                    {starterPrompts.map((prompt) => (
+                        <button
+                            key={prompt}
+                            onClick={() => handleStarterClick(prompt)}
+                            className="text-xs font-mono text-ink-muted border border-border px-3 py-1.5 rounded hover:border-accent hover:text-accent transition-colors"
+                        >
+                            {prompt}
+                        </button>
+                    ))}
+                </div>
+            )}
+            {messages.map((m) => (
+                <div key={m.id} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                    <div
+                        className={`max-w-[80%] text-sm rounded-lg px-4 py-2 leading-relaxed ${
+                            m.role === "user"
+                                ? "bg-accent text-[#0D0D0D] font-medium"
+                                : "bg-background-elevated text-ink border border-border prose-invert"
+                        }`}
+                    >
+                        {m.role === "user" ? (
+                            getMessageText(m)
+                        ) : (
+                            <ReactMarkdown
+                                components={{
+                                    a: ({ children, ...props }) => (
+                                        <a
+                                            {...props}
+                                            className="text-accent underline underline-offset-2 decoration-accent/40 hover:decoration-accent transition-colors"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            {children}
+                                        </a>
+                                    ),
+                                }}
+                            >
+                                {autolinkMarkdown(getMessageText(m))}
+                            </ReactMarkdown>
+                        )}
+                    </div>
+                </div>
+            ))}
+            {isLoading && (
+                <div className="flex justify-start">
+                    <div className="bg-background-elevated border border-border rounded-lg px-4 py-2">
+                        <span className="text-ink-muted text-sm font-mono">thinking...</span>
+                    </div>
+                </div>
+            )}
+            {error && <p className="text-xs font-mono text-red-400 text-center">{error.message}</p>}
+            <div ref={messagesEndRef} />
+        </>
+    );
+
+    // Shared input form for the overlay
+    const renderInputForm = () => (
+        <form onSubmit={handleSubmit} className="border-t border-border flex">
+            <input
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onFocus={handleInputFocus}
+                placeholder="Ask anything about Devin..."
+                disabled={input.length > MAX_INPUT_LENGTH}
+                maxLength={MAX_INPUT_LENGTH}
+                className="flex-1 bg-transparent px-4 py-3 text-base text-ink placeholder-ink-faint outline-none font-mono disabled:opacity-50"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck={false}
+            />
+            <button
+                type="submit"
+                disabled={isLoading || !input.trim() || input.length > MAX_INPUT_LENGTH}
+                className="px-4 py-3 font-mono text-base text-accent hover:text-ink transition-colors disabled:opacity-30 border-l border-border"
             >
-              <div
-                className={`max-w-[80%] text-sm rounded-lg px-4 py-2 leading-relaxed ${
-                  m.role === 'user'
-                    ? 'bg-accent text-[#0D0D0D] font-medium'
-                    : 'bg-background-elevated text-ink border border-border'
-                }`}
-              >
-                {m.content}
-              </div>
-            </div>
-          ))}
-          {isLoading && (
-            <div className="flex justify-start">
-              <div className="bg-background-elevated border border-border rounded-lg px-4 py-2">
-                {/* TODO: Animated typing indicator dots */}
-                <span className="text-ink-muted text-sm font-mono">thinking...</span>
-              </div>
-            </div>
-          )}
-          {error && (
-            <p className="text-xs font-mono text-red-400 text-center">
-              {error.message.includes('429')
-                ? 'Rate limit reached — try again in an hour.'
-                : 'Something went wrong. Please try again.'}
-            </p>
-          )}
-          <div ref={bottomRef} />
-        </div>
-
-        {/* Input */}
-        <form
-          onSubmit={handleSubmit}
-          className="border-t border-border flex gap-0"
-        >
-          <input
-            value={input}
-            onChange={handleInputChange}
-            placeholder="Ask anything about my background..."
-            disabled={isLoading}
-            className="flex-1 bg-transparent px-4 py-3 text-sm text-ink placeholder-ink-faint outline-none font-mono disabled:opacity-50"
-          />
-          <button
-            type="submit"
-            disabled={isLoading || !input.trim()}
-            className="px-4 py-3 font-mono text-sm text-accent hover:text-ink transition-colors disabled:opacity-30 border-l border-border"
-          >
-            send →
-          </button>
+                send &rarr;
+            </button>
         </form>
-      </div>
-    </section>
-  )
+    );
+
+    return (
+        <>
+            {/* Normal section view (desktop + mobile collapsed) */}
+            <section id="chat" className={`py-section border-t border-border${isExpanded ? " invisible" : ""}`}>
+                <p className="section-label mb-2">06 / ask devin</p>
+                <p className="text-ink-muted text-sm mb-6">
+                    Devin&apos;s personal assistant, powered by an LLM.{" "}
+                    <span className="text-ink-faint">Only answers from the knowledge base.</span>
+                </p>
+
+                <div className="border border-border rounded-lg bg-background-surface overflow-hidden">
+                    <div className="h-96 overflow-y-auto p-4 space-y-4">{renderMessages(false)}</div>
+                    <form onSubmit={handleSubmit} className="border-t border-border flex gap-0">
+                        <input
+                            ref={inputRef}
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            onFocus={handleInputFocus}
+                            placeholder="Ask anything about Devin..."
+                            disabled={input.length > MAX_INPUT_LENGTH}
+                            maxLength={MAX_INPUT_LENGTH}
+                            className="flex-1 bg-transparent px-4 py-3 text-base md:text-sm text-ink placeholder-ink-faint outline-none font-mono disabled:opacity-50"
+                        />
+                        <button
+                            type="submit"
+                            disabled={isLoading || !input.trim() || input.length > MAX_INPUT_LENGTH}
+                            className="px-4 py-3 font-mono text-base md:text-sm text-accent hover:text-ink transition-colors disabled:opacity-30 border-l border-border"
+                        >
+                            send &rarr;
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            {/* Full-screen mobile overlay when typing */}
+            <AnimatePresence>
+                {isExpanded && (
+                    <motion.div
+                        ref={overlayRef}
+                        className="fixed left-0 top-0 z-50 flex flex-col bg-[#0D0D0D] w-full"
+                        style={{
+                            height: "100dvh",
+                            top: 0,
+                            transition: animateOverlay ? "height 100ms ease-out, top 100ms ease-out" : "none",
+                        }}
+                        initial={{ y: "100%", opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: "100%", opacity: 0 }}
+                        transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                    >
+                        {/* Header */}
+                        <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
+                            <div>
+                                <p className="section-label mb-0">06 / ask devin</p>
+                                <p className="text-ink-faint text-xs mt-0.5">AI assistant</p>
+                            </div>
+                            <button
+                                onClick={handleClose}
+                                className="font-mono text-xs text-ink-muted hover:text-ink transition-colors px-3 py-1.5 border border-border rounded"
+                            >
+                                close &times;
+                            </button>
+                        </div>
+
+                        {/* Messages — flex-1 fills space between header and input */}
+                        <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">{renderMessages(true)}</div>
+
+                        {/* Input pinned to bottom (above keyboard) */}
+                        <div className="shrink-0" style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
+                            {renderInputForm()}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </>
+    );
 }

@@ -3,6 +3,7 @@
 
 import type { Experience } from '@/types'
 import { formatDateRange } from '@/lib/utils'
+import { Badge } from '@/components/ui/Badge'
 
 interface TimelineProps {
   items: Experience[]
@@ -21,7 +22,7 @@ export function Timeline({ items }: TimelineProps) {
       {/* Vertical line */}
       <div className="absolute left-2 top-2 bottom-2 w-px bg-border" aria-hidden="true" />
 
-      {items.map((item, index) => (
+      {items.map((item) => (
         <div key={item.id} className="relative pl-8">
           {/* Timeline dot */}
           <div
@@ -42,10 +43,8 @@ export function Timeline({ items }: TimelineProps) {
 
             <ul className="mt-3 space-y-1">
               {item.highlights.map((h) => (
-                <li key={h} className="flex gap-2 items-start text-sm text-ink-muted">
-                  <span className="text-accent mt-1 shrink-0" aria-hidden="true">
-                    ›
-                  </span>
+                <li key={h} className="flex gap-2 items-baseline text-sm text-ink-muted">
+                  <span className="text-accent shrink-0" aria-hidden="true">›</span>
                   {h}
                 </li>
               ))}
@@ -53,12 +52,7 @@ export function Timeline({ items }: TimelineProps) {
 
             <div className="flex flex-wrap gap-1.5 mt-3">
               {item.skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="font-mono text-xs text-ink-muted border border-border px-2 py-0.5 rounded"
-                >
-                  {skill}
-                </span>
+                <Badge key={skill}>{skill}</Badge>
               ))}
             </div>
           </div>

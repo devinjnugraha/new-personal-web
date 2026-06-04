@@ -1,6 +1,5 @@
 import { createOpenAI } from '@ai-sdk/openai'
-import { streamText } from 'ai'
-import { kv } from '@vercel/kv'
+import { streamText, convertToModelMessages, type UIMessage } from 'ai'
 import { after } from 'next/server'
 import { portfolio } from '@/data/portfolio'
 
@@ -8,52 +7,64 @@ export const runtime = 'edge'
 
 const openrouter = createOpenAI({
   baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: process.env.OPENROUTER_API_KEY ?? '',
+  apiKey: process.env.OPENROUTER_API_KEY ?? ''
 })
 
-// Rate limit: 20 messages per IP per hour
-const RATE_LIMIT = 20
-const RATE_WINDOW_SECONDS = 60 * 60
+const RATE_LIMIT = parseInt(process.env.CHAT_RATE_LIMIT ?? '20', 10)
+const RATE_WINDOW_MS =
+  parseInt(process.env.CHAT_RATE_WINDOW ?? '3600', 10) * 1000
 
-async function checkRateLimit(ip: string): Promise<{ allowed: boolean; remaining: number }> {
-  const key = `chat_rate:${ip}`
-  try {
-    const count = await kv.incr(key)
-    if (count === 1) {
-      await kv.expire(key, RATE_WINDOW_SECONDS)
-    }
-    const allowed = count <= RATE_LIMIT
-    return { allowed, remaining: Math.max(0, RATE_LIMIT - count) }
-  } catch {
-    // If KV is unavailable, fail open (allow the request)
-    return { allowed: true, remaining: RATE_LIMIT }
+const rateStore = new Map<string, number[]>() // ip → array of request timestamps
+
+function checkRateLimit (ip: string): { allowed: boolean; remaining: number } {
+  const now = Date.now()
+  const cutoff = now - RATE_WINDOW_MS
+  let timestamps = rateStore.get(ip)
+
+  // Purge expired entries
+  if (timestamps) {
+    timestamps = timestamps.filter(t => t > cutoff)
   }
+
+  if (!timestamps || timestamps.length === 0) {
+    rateStore.set(ip, [now])
+    return { allowed: true, remaining: RATE_LIMIT - 1 }
+  }
+
+  if (timestamps.length >= RATE_LIMIT) {
+    return { allowed: false, remaining: 0 }
+  }
+
+  timestamps.push(now)
+  rateStore.set(ip, timestamps)
+  return { allowed: true, remaining: RATE_LIMIT - timestamps.length }
 }
 
-export async function POST(req: Request) {
+export async function POST (req: Request) {
   // Rate limiting
   const ip =
     req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
     req.headers.get('x-real-ip') ??
     'unknown'
 
-  const { allowed, remaining } = await checkRateLimit(ip)
+  const { allowed, remaining } = checkRateLimit(ip)
 
   if (!allowed) {
-    return new Response(
-      JSON.stringify({ error: 'Rate limit exceeded. Try again in an hour.' }),
-      {
-        status: 429,
-        headers: {
-          'Content-Type': 'application/json',
-          'X-RateLimit-Remaining': '0',
-        },
+    const errorChunk = `data: ${JSON.stringify({
+      type: 'error',
+      errorText: '429 - Rate limit reached. Try again in an hour.'
+    })}\n\ndata: [DONE]\n`
+    return new Response(errorChunk, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'X-RateLimit-Remaining': '0'
       }
-    )
+    })
   }
 
   // Parse request
-  let messages: { role: string; content: string }[]
+  let messages: UIMessage[]
   try {
     const body = await req.json()
     messages = body.messages
@@ -61,30 +72,46 @@ export async function POST(req: Request) {
   } catch {
     return new Response(JSON.stringify({ error: 'Invalid request body' }), {
       status: 400,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' }
     })
   }
 
   const model = process.env.CHAT_MODEL ?? 'anthropic/claude-haiku-4-5'
+  const now = new Date()
+  const timestamp = now.toLocaleString('en-US', {
+    timeZone: 'Asia/Jakarta',
+    dateStyle: 'full',
+    timeStyle: 'short'
+  })
 
   const result = streamText({
     model: openrouter(model),
-    system: portfolio.chat.systemPrompt,
-    messages: messages as Parameters<typeof streamText>[0]['messages'],
-    maxTokens: 500,
-    temperature: 0.7,
+    system: `[Current timestamp: ${timestamp}]\n\n${portfolio.chat.systemPrompt}`,
+    messages: await convertToModelMessages(messages),
+    maxOutputTokens: 500,
+    temperature: 0.7618
   })
 
   // Log chat event after response is sent (non-blocking)
   after(async () => {
-    // TODO: Optionally persist chat analytics to a database
-    // e.g. log { ip, messageCount: messages.length, timestamp: new Date() }
-    console.log(`[chat] ip=${ip} messages=${messages.length} remaining=${remaining}`)
+    const msgSummary = messages.map(m => ({
+      role: m.role,
+      text: m.parts
+        ?.filter(p => p.type === 'text')
+        .map(p => p.text)
+        .join('')
+        .slice(0, 80)
+    }))
+    console.log(
+      `[chat] ip=${ip} count=${
+        messages.length
+      } remaining=${remaining} messages=${JSON.stringify(msgSummary)}`
+    )
   })
 
-  return result.toDataStreamResponse({
+  return result.toUIMessageStreamResponse({
     headers: {
-      'X-RateLimit-Remaining': String(remaining),
-    },
+      'X-RateLimit-Remaining': String(remaining)
+    }
   })
 }

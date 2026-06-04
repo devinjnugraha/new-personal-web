@@ -1,6 +1,5 @@
-import type { Metadata } from 'next'
-import { DM_Sans, Playfair_Display } from 'next/font/google'
-import { GeistMono } from 'geist/font/mono'
+import type { Metadata, Viewport } from 'next'
+import { DM_Sans, Playfair_Display, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import './globals.css'
@@ -16,6 +15,10 @@ const playfair = Playfair_Display({
   variable: '--font-playfair',
   display: 'swap',
 })
+
+export const viewport: Viewport = {
+  maximumScale: 1,
+}
 
 export const metadata: Metadata = {
   title: 'Devin Jaya Nugraha',
@@ -39,6 +42,12 @@ export const metadata: Metadata = {
   },
 }
 
+const geistMono = Geist_Mono({
+  subsets: ['latin'],
+  variable: '--font-geist-mono',
+  display: 'swap',
+})
+
 export default function RootLayout({
   children,
 }: {
@@ -47,7 +56,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${playfair.variable} ${GeistMono.variable}`}
+      className={`${dmSans.variable} ${playfair.variable} ${geistMono.variable}`}
     >
       <body className="bg-background text-ink antialiased">
         {children}

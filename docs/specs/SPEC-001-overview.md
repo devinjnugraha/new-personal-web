@@ -1,6 +1,6 @@
 # SPEC-001 — Project Overview & Global Requirements
 
-**Status:** TODO  
+**Status:** IN REVIEW (5/7 acceptance criteria verified, 2 require manual visual testing)
 **Priority:** P0 (foundational — read before all other specs)
 
 ---
@@ -108,10 +108,49 @@ Every section opens with a label in this format:
 
 ## Acceptance Criteria
 
-- [ ] All 7 sections visible and navigable via anchor links
-- [ ] Nav highlights correct section on scroll
-- [ ] No TypeScript errors (`pnpm type-check` passes)
-- [ ] No ESLint errors (`pnpm lint` passes)
+- [x] All 7 sections visible and navigable via anchor links
+  - **Verified:** All 7 `<section>` elements have correct `id` attributes (`#hero`, `#about`, `#education`, `#experience`, `#certifications`, `#writing`, `#chat`). Nav links reference all anchors. `src/app/page.tsx` renders all 7 sections in order.
+- [x] Nav highlights correct section on scroll
+  - **Verified:** `Nav.tsx` implements scroll spy via `getBoundingClientRect().top <= 120`, iterates sections in reverse, sets `activeSection` state, applies `text-accent` class to the matching nav link.
+- [x] No TypeScript errors (`npm run type-check` passes)
+  - **Verified:** `npm run type-check` exits with zero errors. `tsconfig.json` has `"strict": true` enabled.
+- [x] No ESLint errors (`npm run lint` passes)
+  - **Verified:** `npm run lint` reports "No ESLint warnings or errors".
 - [ ] Lighthouse Performance ≥ 90, Accessibility ≥ 95
-- [ ] No `any` in TypeScript output
+  - **Not verified (requires browser):** Cannot run Lighthouse in CLI environment. Automated checks passed:
+    - Build succeeds (199 kB First Load JS for `/`).
+    - All static sections are Server Components (only `ChatInterface`, `Nav`, `TrackedLink` are `'use client'`).
+    - Fonts loaded via `next/font` with `display: swap` — no external font requests.
+    - `@vercel/analytics` and `@vercel/speed-insights` included in root layout.
+    - Semantic HTML used (`<section>`, `<nav>`, `<main>`, `<footer>`).
+    - `aria-label` present on hamburger button, `aria-hidden="true"` on decorative elements (cursor blink, timeline dot, timeline line, scroll indicator).
+    - No `<img>` tags used — no missing `alt` attributes.
+    - **Action required:** Run Lighthouse manually in Chrome DevTools to confirm scores.
+- [x] No `any` in TypeScript output
+  - **Verified:** Grep for `: any`, `<any>`, `as any` patterns across `src/` returns zero matches.
 - [ ] Mobile layout correct at 375px viewport width
+  - **Not verified (requires visual testing):** Code review findings:
+    - Mobile hamburger menu implemented with overlay (`md:hidden` / `hidden md:flex`).
+    - Responsive typography: `text-5xl md:text-7xl` on hero heading.
+    - Body scroll locked when mobile menu is open.
+    - Hero CTAs use `flex-wrap` for small screens.
+    - `max-w-content` (720px) with `px-6` padding ensures no horizontal overflow.
+    - Chat input uses `text-base md:text-sm` to prevent iOS zoom.
+    - **Action required:** Visual testing at 375px viewport.
+
+---
+
+## Global Requirements Verification (2026-06-04)
+
+| ID   | Requirement                                                                                                           | Status  | Evidence                                                                                                            |
+| ---- | --------------------------------------------------------------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
+| G-01 | All content renders without JavaScript (Server Components for all static sections)                                    | ✅ PASS | Only `ChatInterface`, `Nav`, `TrackedLink` use `'use client'`. Hero, About, Education, Experience, Certifications, Writing are all Server Components. Build generates static pages. |
+| G-02 | Page is fully responsive: mobile-first, tested at 375px, 768px, 1280px                                                | ⏳      | Responsive classes present (`md:` breakpoints, mobile menu, `flex-wrap`). **Requires visual testing.**            |
+| G-03 | All external links open in a new tab with `rel="noopener noreferrer"`                                                 | ✅ PASS | All `target="_blank"` links have matching `rel="noopener noreferrer"` (Hero.tsx, Certifications.tsx, Writing.tsx). TrackedLink passes through `rel` prop. |
+| G-04 | No content is hardcoded in component files — all comes from `src/data/portfolio.ts`                                   | ✅ PASS | All section components import from `@/data/portfolio`. Hero uses `person`, `links`; About uses `person`, `skills`; etc. No hardcoded content strings found. |
+| G-05 | TypeScript strict mode; no `any` types                                                                                | ✅ PASS | `tsconfig.json` has `"strict": true`. Zero `any` type usages found via grep.                                         |
+| G-06 | All images have `alt` text; all interactive elements have accessible labels                                           | ✅ PASS | No `<img>` tags in codebase. `aria-label` on hamburger button. `aria-hidden="true"` on decorative elements. Semantic HTML (`<section>`, `<nav>`, `<main>`, `<footer>`). |
+| G-07 | Page loads with a Lighthouse performance score ≥ 90                                                                   | ⏳      | Build succeeds (199 kB First Load). All static sections Server Components. Fonts via `next/font`. **Requires Lighthouse.** |
+| G-08 | No placeholder/lorem ipsum text in production build                                                                  | ✅ PASS | Grep for "lorem", "placeholder", "TODO" content returns no matches in component files. All text is real content from portfolio.ts. |
+| G-09 | The site is dark-mode only in v1; no light mode toggle                                                                | ✅ PASS | No `dark:` Tailwind prefix usage found. No theme toggle component. Body has `bg-background text-ink` (dark palette). |
+| G-10 | Anchor links for each section: `#hero`, `#about`, `#education`, `#experience`, `#certifications`, `#writing`, `#chat` | ✅ PASS | All 7 sections have correct `id` attributes. Nav links reference all anchors.                                       |

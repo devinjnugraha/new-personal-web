@@ -2,9 +2,10 @@
 // Type: Server Component
 
 import { portfolio } from '@/data/portfolio'
+import { Badge } from '@/components/ui/Badge'
 
 export function About() {
-  const { skills } = portfolio
+  const { person, skills } = portfolio
   const skillGroups = [
     { label: 'Languages', items: skills.languages },
     { label: 'Frontend', items: skills.frontend },
@@ -13,16 +14,12 @@ export function About() {
     { label: 'Data', items: skills.data },
     { label: 'Tools', items: skills.tools },
   ]
-  // TODO: Full implementation per SPEC-004
-  // Requirements:
-  //   - Section label "01 / about"
-  //   - Expanded bio paragraph (from portfolio.person.bio or inline)
-  //   - Skills grouped by category in a 2-3 column responsive grid
-  //   - Tags/pills per skill item (not plain text)
   return (
     <section id="about" className="py-section border-t border-border">
       <p className="section-label mb-8">01 / about</p>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mt-8">
+      <p className="text-ink-muted leading-relaxed max-w-lg">{person.bio}</p>
+      <p className="section-label mt-10 mb-6">skills</p>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
         {skillGroups.map(({ label, items }) => (
           <div key={label}>
             <p className="font-mono text-xs text-ink-muted uppercase tracking-widest mb-3">
@@ -30,12 +27,7 @@ export function About() {
             </p>
             <div className="flex flex-wrap gap-2">
               {items.map((skill) => (
-                <span
-                  key={skill}
-                  className="text-xs font-mono text-ink-muted border border-border px-2 py-1 rounded"
-                >
-                  {skill}
-                </span>
+                <Badge key={skill}>{skill}</Badge>
               ))}
             </div>
           </div>
