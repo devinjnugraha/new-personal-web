@@ -1,4 +1,4 @@
-# SPEC-008 — Writing & Research Section
+# SPEC-008 — Research & Writings Section
 
 **Status:** TODO  
 **Component:** `src/components/sections/Writing.tsx` (Server Component)  
@@ -19,7 +19,7 @@ links to writings on LinkedIn. The publication is the centerpiece.
 ## Layout
 
 ```
-05 / writing & research
+05 / research & writings
 
 RESEARCH
 
@@ -37,7 +37,7 @@ RESEARCH
 │  View on ScienceDirect →                                 │
 └──────────────────────────────────────────────────────────┘
 
-WRITINGS
+ARTICLES & POSTS
 
   linkedin  LinkedIn Profile & Posts
             Professional updates, project write-ups, and reflections.
@@ -68,7 +68,7 @@ WRITINGS
 
 | ID | Requirement |
 |---|---|
-| W-13 | Sub-label: `"WRITINGS"` in section-label style, `mb-4` |
+| W-13 | Sub-label: `"ARTICLES & POSTS"` in section-label style, `mb-4` |
 | W-14 | List: `space-y-5` |
 | W-15 | Each row: `<a>` tag wrapping `flex gap-4 items-start group` |
 | W-16 | Type label: `font-mono text-xs text-ink-muted uppercase w-16 shrink-0 mt-0.5` |

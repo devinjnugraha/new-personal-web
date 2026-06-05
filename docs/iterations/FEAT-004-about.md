@@ -1,6 +1,6 @@
 # SPEC-004 — About & Skills Section
 
-**Status:** TODO  
+**Status:** DONE   
 **Component:** `src/components/sections/About.tsx` (Server Component)  
 **Section ID:** `#about`  
 **Section Number:** 01  
@@ -47,7 +47,7 @@ Skills              ← sub-label
 | A-03 | Skills sub-label: `"skills"` in section-label style, `mt-10 mb-6` |
 | A-04 | Skills rendered in a responsive grid: `grid-cols-2 md:grid-cols-3 gap-8` |
 | A-05 | Each skill group has a category label in `font-mono text-xs text-ink-muted uppercase tracking-widest mb-3` |
-| A-06 | Each skill item is a pill/tag: `font-mono text-xs text-ink-muted border border-border px-2 py-1 rounded` |
+| A-06 | Each skill item is a pill/tag: `font-mono text-xs text-ink-muted border border-border px-2 py-0.5 rounded hover:border-accent hover:text-accent transition-colors` |
 | A-07 | Pills in a `flex flex-wrap gap-2` row within each group |
 | A-08 | Skill groups in order: Languages, Frontend, Backend, ML/AI, Data, Tools |
 | A-09 | No skill item is truncated or overflows its container |
@@ -56,7 +56,7 @@ Skills              ← sub-label
 
 ## Acceptance Criteria
 
-- [ ] Bio text matches `portfolio.person.bio` value
-- [ ] All 6 skill categories rendered
-- [ ] Skill pills do not overflow on mobile (375px)
-- [ ] Category labels are visually distinct from skill items
+- [x] Bio text matches `portfolio.person.bio` value
+- [x] All 6 skill categories rendered
+- [x] Skill pills do not overflow on mobile (375px)
+- [x] Category labels are visually distinct from skill items

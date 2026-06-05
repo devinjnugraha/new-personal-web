@@ -8,6 +8,7 @@ import { DefaultChatTransport } from "ai";
 import type { UIMessage } from "ai";
 import { track } from "@vercel/analytics";
 import { useRef, useEffect, useState, useCallback } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -43,8 +44,10 @@ export function ChatInterface() {
     const [input, setInput] = useState("");
     const [isExpanded, setIsExpanded] = useState(false);
     const [animateOverlay, setAnimateOverlay] = useState(false);
-    const inputRef = useRef<HTMLInputElement>(null);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const isMobile = useIsMobile();
+    const inputRef = useRef<HTMLTextAreaElement>(null);
+    const desktopScrollRef = useRef<HTMLDivElement>(null);
+    const overlayScrollRef = useRef<HTMLDivElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const isLoading = status === "submitted" || status === "streaming";
 
@@ -63,6 +66,13 @@ export function ChatInterface() {
         return () => {
             document.body.style.overflow = "";
         };
+    }, [isExpanded]);
+
+    // Focus the overlay input after it mounts so the keyboard opens
+    useEffect(() => {
+        if (isExpanded) {
+            inputRef.current?.focus();
+        }
     }, [isExpanded]);
 
     // Enable CSS transition only after the overlay has mounted at its
@@ -107,9 +117,19 @@ export function ChatInterface() {
         };
     }, [isExpanded]);
 
-    // Auto-scroll to bottom when messages change
+    // Auto-scroll to bottom when messages change (skip initial mount to prevent page jump)
+    const isInitialMount = useRef(true);
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            return;
+        }
+        const scrollToBottom = (el: HTMLDivElement | null) => {
+            if (!el) return;
+            el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+        };
+        scrollToBottom(desktopScrollRef.current);
+        scrollToBottom(overlayScrollRef.current);
     }, [messages]);
 
     const starterPrompts = [
@@ -128,22 +148,42 @@ export function ChatInterface() {
         if (text.length > MAX_INPUT_LENGTH) return;
         sendMessage({ text });
         setInput("");
-        inputRef.current?.blur();
+        if (inputRef.current) {
+            inputRef.current.style.height = "auto";
+        }
+        if (isMobile) {
+            inputRef.current?.blur();
+        }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            handleSubmit(e);
+        }
     };
 
     const handleStarterClick = (prompt: string) => {
         if (isLoading) return;
-        if (window.innerWidth < 768) {
+        if (isMobile) {
             setIsExpanded(true);
         }
         sendMessage({ text: prompt });
     };
 
     const handleInputFocus = useCallback(() => {
-        if (window.innerWidth < 768) {
+        if (isMobile) {
             setIsExpanded(true);
         }
-    }, []);
+    }, [isMobile]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setInput(e.target.value);
+        // Auto-resize: shrink first then grow to content
+        const ta = e.target;
+        ta.style.height = "auto";
+        ta.style.height = `${Math.min(ta.scrollHeight, 120)}px`;
+    };
 
     const handleClose = () => {
         setIsExpanded(false);
@@ -206,22 +246,23 @@ export function ChatInterface() {
                 </div>
             )}
             {error && <p className="text-xs font-mono text-red-400 text-center">{error.message}</p>}
-            <div ref={messagesEndRef} />
         </>
     );
 
     // Shared input form for the overlay
     const renderInputForm = () => (
-        <form onSubmit={handleSubmit} className="border-t border-border flex">
-            <input
+        <form onSubmit={handleSubmit} className="border-t border-border flex items-end">
+            <textarea
                 ref={inputRef}
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
                 onFocus={handleInputFocus}
                 placeholder="Ask anything about Devin..."
                 disabled={input.length > MAX_INPUT_LENGTH}
                 maxLength={MAX_INPUT_LENGTH}
-                className="flex-1 bg-transparent px-4 py-3 text-base text-ink placeholder-ink-faint outline-none font-mono disabled:opacity-50"
+                rows={1}
+                className="flex-1 bg-transparent px-4 py-3 text-base text-ink placeholder-ink-faint outline-none font-mono placeholder:text-sm disabled:opacity-50 resize-none"
                 autoComplete="off"
                 autoCorrect="off"
                 autoCapitalize="off"
@@ -248,17 +289,19 @@ export function ChatInterface() {
                 </p>
 
                 <div className="border border-border rounded-lg bg-background-surface overflow-hidden">
-                    <div className="h-96 overflow-y-auto p-4 space-y-4">{renderMessages(false)}</div>
-                    <form onSubmit={handleSubmit} className="border-t border-border flex gap-0">
-                        <input
+                    <div ref={desktopScrollRef} className="h-96 overflow-y-auto p-4 space-y-4">{renderMessages(false)}</div>
+                    <form onSubmit={handleSubmit} className="border-t border-border flex items-end gap-0">
+                        <textarea
                             ref={inputRef}
                             value={input}
-                            onChange={(e) => setInput(e.target.value)}
+                            onChange={handleInputChange}
+                            onKeyDown={handleKeyDown}
                             onFocus={handleInputFocus}
                             placeholder="Ask anything about Devin..."
                             disabled={input.length > MAX_INPUT_LENGTH}
                             maxLength={MAX_INPUT_LENGTH}
-                            className="flex-1 bg-transparent px-4 py-3 text-base md:text-sm text-ink placeholder-ink-faint outline-none font-mono disabled:opacity-50"
+                            rows={1}
+                            className="flex-1 bg-transparent px-4 py-3 text-base md:text-sm text-ink placeholder-ink-faint outline-none font-mono placeholder:text-sm disabled:opacity-50 resize-none"
                         />
                         <button
                             type="submit"
@@ -290,7 +333,7 @@ export function ChatInterface() {
                         {/* Header */}
                         <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
                             <div>
-                                <p className="section-label mb-0">06 / ask devin</p>
+                                <p className="section-label mb-0">ask devin</p>
                                 <p className="text-ink-faint text-xs mt-0.5">AI assistant</p>
                             </div>
                             <button
@@ -302,7 +345,7 @@ export function ChatInterface() {
                         </div>
 
                         {/* Messages — flex-1 fills space between header and input */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">{renderMessages(true)}</div>
+                        <div ref={overlayScrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">{renderMessages(true)}</div>
 
                         {/* Input pinned to bottom (above keyboard) */}
                         <div className="shrink-0" style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>

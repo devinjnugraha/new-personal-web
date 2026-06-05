@@ -24,6 +24,20 @@ export interface Thesis {
   publicationRef: string
 }
 
+export interface Gpa {
+  value: string
+  scale: string
+}
+
+export interface EducationOrganization {
+  role: string
+  organization: string
+  startDate: string
+  endDate: string
+  description: string
+  highlights: string[]
+}
+
 export interface Education {
   id: string
   institution: string
@@ -35,20 +49,27 @@ export interface Education {
   endYear: number
   durationNote: string
   honor: string
-  thesis: Thesis
+  thesis?: Thesis
+  gpa?: Gpa
+  organizations?: EducationOrganization[]
 }
 
 // ─── Experience ──────────────────────────────────────────────────────────────
 
-export type ExperienceType = 'full-time' | 'part-time' | 'contract' | 'organizational' | 'internship'
+export type ExperienceType =
+  | 'full-time'
+  | 'part-time'
+  | 'contract'
+  | 'organizational'
+  | 'internship'
 
 export interface Experience {
   id: string
   role: string
   organization: string
   type: ExperienceType
-  startDate: string       // ISO month: 'YYYY-MM'
-  endDate: string | null  // null = present
+  startDate: string // ISO month: 'YYYY-MM'
+  endDate: string | null // null = present
   description: string
   highlights: string[]
   skills: string[]
@@ -64,11 +85,16 @@ export interface Certification {
   credentialUrl: string
   skills: string[]
   featured: boolean
+  badgeUrl?: string
 }
 
 // ─── Achievements ────────────────────────────────────────────────────────────
 
-export type AchievementType = 'competition' | 'academic' | 'award' | 'recognition'
+export type AchievementType =
+  | 'competition'
+  | 'academic'
+  | 'award'
+  | 'recognition'
 
 export interface Achievement {
   id: string
@@ -89,7 +115,7 @@ export interface Publication {
   journalShort: string
   quartile: JournalQuartile
   publisher: string
-  publishedDate: string   // ISO date: 'YYYY-MM-DD'
+  publishedDate: string // ISO date: 'YYYY-MM-DD'
   authors: string[]
   myRole: string
   doi: string
@@ -101,7 +127,7 @@ export interface Publication {
 
 // ─── Writings ────────────────────────────────────────────────────────────────
 
-export type WritingType = 'blog' | 'linkedin' | 'article' | 'note'
+export type WritingType = 'blog' | 'linkedin' | 'article' | 'note' | 'video'
 
 export interface Writing {
   id: string

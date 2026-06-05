@@ -1,6 +1,6 @@
 # SPEC-003 — Hero Section
 
-**Status:** TODO  
+**Status:** DONE   
 **Component:** `src/components/sections/Hero.tsx` (Server Component)  
 **Priority:** P0  
 **Data source:** `portfolio.person`, `portfolio.links`
@@ -28,7 +28,7 @@ no gradient blobs. Just strong typography and clear CTAs.
 
   [bio paragraph]          ← DM Sans, muted, max-w-lg
 
-  github →   linkedin →   download cv →   ← text links, monospace, muted → accent on hover
+  github →   linkedin →   download cv →   email →   ← text links, monospace, muted → accent on hover
 
   [scroll indicator ↓]     ← bottom of section, centered
 ```
@@ -40,16 +40,16 @@ no gradient blobs. Just strong typography and clear CTAs.
 | ID | Requirement |
 |---|---|
 | H-01 | Section height: `min-h-screen` with `flex items-center` |
-| H-02 | Top padding `pt-20` to clear the fixed nav |
+| H-02 | Top padding `pt-16` to clear the fixed nav |
 | H-03 | Section label: `// hello, world` — uses `.section-label` class, `mb-4` |
 | H-04 | Name: `font-serif text-5xl md:text-7xl text-ink` |
 | H-05 | Blinking cursor after name: `<span className="animate-blink text-accent">_</span>` |
 | H-06 | Tagline: `font-mono text-accent text-sm mb-6` — from `portfolio.person.tagline` |
 | H-07 | Bio paragraph: `text-ink-muted max-w-lg leading-relaxed mb-8` — from `portfolio.person.bio` |
-| H-08 | Three CTAs rendered as `<a>` tags (not `<button>`): GitHub, LinkedIn, Download CV |
+| H-08 | Four CTAs rendered as `<a>` tags (not `<button>`): GitHub, LinkedIn, Download CV, Email |
 | H-09 | CTA style: `font-mono text-sm text-ink-muted hover:text-accent transition-colors` |
 | H-10 | CTAs in a `flex gap-6 flex-wrap` row |
-| H-11 | GitHub and LinkedIn open in new tab (`target="_blank"`) |
+| H-11 | GitHub and LinkedIn open in new tab (`target="_blank"`). Email uses `mailto:` (no new tab). |
 | H-12 | CV link points to `/cv.pdf` (no new tab — browser handles PDF) |
 | H-13 | Scroll indicator: a centered `↓` or chevron icon at bottom of section, `text-ink-muted`, subtle bounce animation |
 
@@ -86,11 +86,11 @@ with `whileInView={{ opacity: 1, y: 0 }}` reveal.
 
 ## Acceptance Criteria
 
-- [ ] Name renders in Playfair Display serif font
-- [ ] Tagline renders in Geist Mono in accent color
-- [ ] Cursor blinks with CSS animation
-- [ ] All three CTA links functional and styled
-- [ ] Section fills viewport height
-- [ ] Bio comes from `portfolio.person.bio` (not hardcoded)
-- [ ] Scroll indicator visible at bottom
-- [ ] No layout shift on load
+- [x] Name renders in Playfair Display serif font
+- [x] Tagline renders in Geist Mono in accent color
+- [x] Cursor blinks with CSS animation
+- [x] All four CTA links functional and styled
+- [x] Section fills viewport height
+- [x] Bio comes from `portfolio.person.bio` (not hardcoded)
+- [x] Scroll indicator visible at bottom
+- [x] No layout shift on load

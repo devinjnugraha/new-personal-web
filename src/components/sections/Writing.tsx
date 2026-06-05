@@ -4,12 +4,14 @@
 import { portfolio } from "@/data/portfolio";
 import { TrackedLink } from "@/components/ui/TrackedLink";
 
+const toYear = (iso: string) => new Date(iso).getFullYear().toString()
+
 export function Writing() {
     const { publications, writings } = portfolio;
     const featured = publications.find((p) => p.featured);
     return (
         <section id="writing" className="py-section border-t border-border">
-            <p className="section-label mb-8">05 / writing & research</p>
+            <p className="section-label mb-8">05 / research & writings</p>
 
             <p className="section-label mb-4">research</p>
             {featured && (
@@ -21,6 +23,8 @@ export function Writing() {
                         <span className="font-mono text-xs text-ink-muted">{featured.journal}</span>
                         <span className="font-mono text-xs text-ink-muted">·</span>
                         <span className="font-mono text-xs text-ink-muted">{featured.publisher}</span>
+                        <span className="font-mono text-xs text-ink-muted">·</span>
+                        <span className="font-mono text-xs text-ink-muted">{toYear(featured.publishedDate)}</span>
                     </div>
                     <h3 className="text-ink font-medium leading-snug text-lg mt-3">{featured.title}</h3>
                     <p className="text-ink-muted text-sm mt-2">{featured.authors.join(", ")}</p>
@@ -39,7 +43,7 @@ export function Writing() {
                 </div>
             )}
 
-            <p className="section-label mb-4">writings</p>
+            <p className="section-label mb-4">articles & posts</p>
             <div className="space-y-5">
                 {writings.map((w) => (
                     <a key={w.id} href={w.url} target="_blank" rel="noopener noreferrer" className="flex items-start gap-4 group">
@@ -48,6 +52,7 @@ export function Writing() {
                             <p className="text-ink text-sm group-hover:text-accent transition-colors">{w.title}</p>
                             <p className="text-ink-muted text-xs">{w.description}</p>
                         </div>
+                        {w.publishedDate && <span className="font-mono text-xs text-ink-muted ml-auto shrink-0 mt-0.5">{toYear(w.publishedDate)}</span>}
                     </a>
                 ))}
             </div>

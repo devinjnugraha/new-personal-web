@@ -12,7 +12,7 @@ const NAV_ITEMS = [
   { id: 'education', label: '02 education' },
   { id: 'experience', label: '03 experience' },
   { id: 'certifications', label: '04 certs' },
-  { id: 'writing', label: '05 writing' },
+  { id: 'writing', label: '05 research' },
   { id: 'chat', label: '06 ask' },
 ] as const
 

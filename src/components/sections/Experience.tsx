@@ -6,7 +6,7 @@ import { Timeline } from '@/components/ui/Timeline'
 
 export function Experience() {
   const { experience } = portfolio
-  // TODO: Full implementation per SPEC-006
+  // TODO: Full implementation per SPEC-006 (see docs/iterations/FEAT-006-experience.md)
   // Requirements:
   //   - Vertical timeline layout using Timeline component
   //   - Each entry: role, org, date range, highlights as bullet points

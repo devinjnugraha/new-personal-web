@@ -1,6 +1,6 @@
 # SPEC-002 — Layout & Navigation
 
-**Status:** TODO  
+**Status:** DONE   
 **Component:** `src/components/ui/Nav.tsx` (Client), `src/app/layout.tsx` (Server), `src/app/page.tsx` (Server)  
 **Priority:** P0
 
@@ -20,7 +20,7 @@ element on the page and must work both on desktop and mobile.
 | ID | Requirement |
 |---|---|
 | L-01 | Load fonts via `next/font/google`: `DM_Sans` (variable `--font-dm-sans`), `Playfair_Display` (variable `--font-playfair`) |
-| L-02 | Load `GeistMono` from `geist/font/mono` (variable `--font-geist-mono`) |
+| L-02 | Load `Geist_Mono` from `next/font/google` (variable `--font-geist-mono`) |
 | L-03 | Apply font variables to `<html>` element via `className` |
 | L-04 | `<body>` has `bg-background text-ink antialiased` |
 | L-05 | `<Analytics />` from `@vercel/analytics/react` rendered in body |
@@ -62,7 +62,7 @@ element on the page and must work both on desktop and mobile.
 02 education  → #education
 03 experience → #experience
 04 certs      → #certifications
-05 writing    → #writing
+05 research   → #writing
 06 ask        → #chat
 ```
 
@@ -74,7 +74,7 @@ element on the page and must work both on desktop and mobile.
 |---|---|
 | P-01 | Renders `<Nav />` outside `<main>` (so it can be fixed over all content) |
 | P-02 | `<main>` has `mx-auto max-w-content px-6` |
-| P-03 | Sections rendered in order: Hero, About, Education, Experience, Certifications, Writing, ChatInterface |
+| P-03 | Sections rendered in order: Hero, About, Education, Experience, Certifications, Writing (Research & Writings), ChatInterface |
 | P-04 | `<footer>` below main with copyright line and `border-t border-border` |
 | P-05 | Footer uses `new Date().getFullYear()` — never hardcode the year |
 
@@ -92,9 +92,9 @@ element on the page and must work both on desktop and mobile.
 
 ## Acceptance Criteria
 
-- [ ] Nav is visible and fixed at top across all sections
-- [ ] Nav becomes opaque with blur effect when user scrolls down
-- [ ] Active section label turns accent-colored in nav
-- [ ] Mobile hamburger menu opens/closes correctly
-- [ ] All nav links scroll to correct section
-- [ ] Footer shows correct year dynamically
+- [x] Nav is visible and fixed at top across all sections
+- [x] Nav becomes opaque with blur effect when user scrolls down
+- [x] Active section label turns accent-colored in nav
+- [x] Mobile hamburger menu opens/closes correctly
+- [x] All nav links scroll to correct section
+- [x] Footer shows correct year dynamically

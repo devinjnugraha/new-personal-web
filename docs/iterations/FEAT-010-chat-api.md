@@ -56,8 +56,8 @@ the browser.
 | API-15 | API key from `process.env.OPENROUTER_API_KEY` — never hardcoded                                              |
 | API-16 | Model from `process.env.CHAT_MODEL` — never hardcoded                                                        |
 | API-17 | System prompt from `portfolio.chat.systemPrompt` — imported from `@/data/portfolio`                          |
-| API-18 | `maxTokens: 500` — cap response length                                                                       |
-| API-19 | `temperature: 0.7`                                                                                           |
+| API-18 | `maxOutputTokens` from `process.env.CHAT_MAX_OUTPUT_TOKENS` — defaults to `1000`                              |
+| API-19 | `temperature` from `process.env.CHAT_TEMPERATURE` — defaults to `0.7618`                                    |
 | API-20 | Use `streamText` from `ai` package                                                                           |
 | API-21 | Return `result.toDataStreamResponse()` with `X-RateLimit-Remaining` header                                   |
 
@@ -85,10 +85,14 @@ With appropriate HTTP status code.
 
 ## Environment Variables Required
 
-| Variable             | Description                                         |
-| -------------------- | --------------------------------------------------- |
-| `OPENROUTER_API_KEY` | OpenRouter API key (`sk-or-v1-...`)                 |
-| `CHAT_MODEL`         | Full model string e.g. `anthropic/claude-haiku-4-5` |
+| Variable                  | Default  | Description                                         |
+| ------------------------- | -------- | --------------------------------------------------- |
+| `OPENROUTER_API_KEY`      | —        | OpenRouter API key (`sk-or-v1-...`)                 |
+| `CHAT_MODEL`              | —        | Full model string e.g. `anthropic/claude-haiku-4-5` |
+| `CHAT_MAX_OUTPUT_TOKENS`  | `1000`   | Max tokens in LLM response                           |
+| `CHAT_TEMPERATURE`        | `0.7618` | Sampling temperature                                |
+| `CHAT_RATE_LIMIT`         | `20`     | Max messages per IP per window                       |
+| `CHAT_RATE_WINDOW`        | `3600`   | Rate limit window in seconds                        |
 
 ---
 

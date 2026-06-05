@@ -61,10 +61,18 @@ export function buildChatSystemPrompt (data: PortfolioData): string {
   ]
 
   const educationSection = data.education
-    .map(
-      e =>
-        `- ${e.degree} in ${e.field} from ${e.institution} (${e.startYear}–${e.endYear}), ${e.location}. ${e.durationNote}. Honor: ${e.honor}.`
-    )
+    .map(e => {
+      let line = `- ${e.degree} in ${e.field} from ${e.institution} (${e.startYear}–${e.endYear}), ${e.location}. ${e.durationNote}. Honor: ${e.honor}.`
+      if (e.organizations && e.organizations.length > 0) {
+        e.organizations.forEach(org => {
+          line += `\n  - ${org.role} at ${org.organization} (${org.startDate} to ${org.endDate}). ${org.description}`
+          org.highlights.forEach(h => {
+            line += `\n    - ${h}`
+          })
+        })
+      }
+      return line
+    })
     .join('\n')
 
   const experienceSection = data.experience
@@ -171,7 +179,7 @@ been working at the intersection of software engineering and applied machine lea
       location: 'Malang, East Java, Indonesia',
       startYear: 2020,
       endYear: 2023,
-      durationNote: 'Completed in 3.5 years',
+      durationNote: '',
       honor: 'Very Satisfactory (Memuaskan)',
       thesis: {
         title:
@@ -179,46 +187,108 @@ been working at the intersection of software engineering and applied machine lea
         description:
           'Proposed weighted loss application in CNN to detect glaucoma on the imbalanced SMDG-19 fundus image dataset, demonstrating improved recall and F1-score over standard cross-entropy loss.',
         publicationRef: 'sciencedirect-2025'
-      }
+      },
+      gpa: { value: '3.87', scale: '4.00' },
+      organizations: [
+        {
+          role: 'Deputy Head of Information Technology Department',
+          organization: 'Eksekutif Mahasiswa Informatika (EMIF)',
+          startDate: '2022-01',
+          endDate: '2023-01',
+          description:
+            'Co-led technical initiatives and managed IT operations for the Informatics Student Executive Organization, supporting internal digital services and infrastructure.',
+          highlights: [
+            'Developed and maintained the organization website using Laravel',
+            'Provided technical support and administration for IT infrastructure',
+            'Collaborated with student leaders to deliver technology solutions for organizational activities',
+            'Improved accessibility of organizational information through web-based platforms'
+          ]
+        }
+      ]
+    },
+    {
+      id: '63-mipa',
+      institution: 'SMAN 63 Jakarta',
+      institutionShort: 'SMAN 63',
+      degree: 'High School',
+      field: 'Mathematics and Natural Science',
+      location: 'Jakarta Selatan, Jakarta, Indonesia',
+      startYear: 2017,
+      endYear: 2020,
+      durationNote: '',
+      honor: '',
+      gpa: { value: '3.37', scale: '4.00' }
     }
   ],
 
   experience: [
     {
-      id: 'ta-java',
-      role: 'Practicum Assistant — Basic Programming',
-      organization: 'Brawijaya University',
-      type: 'part-time',
-      startDate: '2021-03',
-      endDate: '2022-06',
+      id: 'sd-cgs',
+      role: 'Software Developer',
+      organization: 'CGS International Sekuritas Indonesia',
+      type: 'full-time',
+      startDate: '2024-02',
+      endDate: null,
       description:
-        'Taught introductory Java programming to 37 students majoring in Informatics, covering standard I/O, data types, conditional statements, loops, arrays, and methods.',
+        'Developing and maintaining internal web applications for securities trading and portfolio management using React, Next.js, and Spring Boot. Collaborating with cross-functional teams to implement new features, optimize performance, and ensure security compliance in a fast-paced financial environment.',
       highlights: [
-        'Led weekly lab sessions for 37 undergraduate students',
-        'Topics: Java I/O, data types, conditionals, loops, arrays, methods',
-        'Prepared lab materials and graded weekly assignments'
+        'Built a real-time stock monitoring dashboard using React and WebSocket',
+        'Implemented RESTful APIs with Spring Boot to support trading operations',
+        'Optimized application performance, reducing load times by 30%',
+        'Collaborated with traders and analysts to gather requirements and deliver tailored solutions'
       ],
-      skills: ['Java', 'Teaching', 'Curriculum Design']
+      skills: [
+        'React',
+        'Next.js',
+        'Spring Boot',
+        'REST APIs',
+        'WebSocket',
+        'Performance Optimization',
+        'Agile Development'
+      ]
     },
     {
-      id: 'emi-it-deputy',
-      role: 'Deputy Head of Information Technology',
-      organization: 'Eksekutif Mahasiswa Informatika (EMI)',
-      type: 'organizational',
-      startDate: '2022-03',
-      endDate: '2023-03',
+      id: 'ta-filkom',
+      role: 'Practicum Assistant',
+      organization: 'Brawijaya University',
+      type: 'part-time',
+      startDate: '2021-08',
+      endDate: '2023-01',
       description:
-        'Led the IT department within the student executive body of the Informatics faculty, overseeing digital infrastructure and technology initiatives.',
+        'Taught and mentored undergraduate students in programming, algorithms, databases, and operating systems through weekly laboratory sessions. Delivered hands-on instruction using Java, SQL Server, and Linux while supporting students in developing strong foundations in computer science concepts.',
       highlights: [
-        'Managed IT department operations and member coordination',
-        'Oversaw digital communications and internal systems',
-        'Organized technology-related student events'
+        'Instructed over 150 students across five computer science courses',
+        'Taught Java programming fundamentals, object-oriented programming, algorithms, and data structures',
+        'Delivered database laboratory sessions covering ERD, relational algebra, SQL, transactions, and T-SQL',
+        'Guided operating systems concepts using Linux, covering shell scripting, process management, synchronization, and virtualization',
+        'Prepared teaching materials, evaluated assignments, and provided academic mentoring'
       ],
-      skills: ['Leadership', 'Project Management', 'Team Coordination']
+      skills: [
+        'Java',
+        'SQL Server',
+        'Linux',
+        'Algorithms and Data Structures',
+        'Database Systems',
+        'Object-Oriented Programming',
+        'Operating Systems',
+        'Teaching',
+        'Mentoring'
+      ]
     }
   ],
 
   certifications: [
+    {
+      id: 'aws-developer',
+      name: 'Certified AWS Developer',
+      issuer: 'Amazon Web Services',
+      year: 2025,
+      credentialUrl: '',
+      skills: ['AWS', 'Cloud Computing', 'Serverless', 'DevOps'],
+      featured: true,
+      badgeUrl:
+        'https://images.credly.com/images/b9feab85-1a43-4f6c-99a5-631b88d5461b/image.png'
+    },
     {
       id: 'tf-developer',
       name: 'TensorFlow Developer Certificate',
@@ -226,7 +296,9 @@ been working at the intersection of software engineering and applied machine lea
       year: 2023,
       credentialUrl: '',
       skills: ['TensorFlow', 'Deep Learning', 'CNN', 'NLP'],
-      featured: true
+      featured: true,
+      badgeUrl:
+        'https://devinjnugraha.github.io/static/media/logoTensorFlowCertified.c42092cdb501d0753cd8.png'
     },
     {
       id: 'google-data-analytics',
@@ -235,7 +307,9 @@ been working at the intersection of software engineering and applied machine lea
       year: 2022,
       credentialUrl: '',
       skills: ['Data Analysis', 'SQL', 'R', 'Tableau', 'BigQuery'],
-      featured: true
+      featured: true,
+      badgeUrl:
+        'https://images.credly.com/size/680x680/images/d41de2b7-cbc2-47ec-bcf1-ebecbe83872f/GCC_badge_DA_1000x1000.png'
     },
     {
       id: 'google-it-python',
@@ -244,7 +318,9 @@ been working at the intersection of software engineering and applied machine lea
       year: 2022,
       credentialUrl: '',
       skills: ['Python', 'Automation', 'Git', 'Regex', 'Cloud'],
-      featured: true
+      featured: false,
+      badgeUrl:
+        'https://images.credly.com/size/160x160/images/efbdc0d6-b46e-4e3c-8cf8-2314d8a5b971/GCC_badge_python_1000x1000.png'
     }
   ],
 
@@ -297,11 +373,32 @@ been working at the intersection of software engineering and applied machine lea
 
   writings: [
     {
-      id: 'linkedin-profile',
-      title: 'LinkedIn Profile & Posts',
-      description: 'Professional updates, project write-ups, and reflections.',
-      url: 'https://linkedin.com/in/devinjnugraha',
-      type: 'linkedin'
+      id: 'linkedin-1',
+      title: 'UntukSatuBumi: A Call for Indonesia Environmental Action',
+      description:
+        'An article discussing the importance of mangrove conservation.',
+      url: 'https://www.linkedin.com/posts/devinjnugraha_untuksatubumi-activity-7392427953571151872-iyIU?utm_source=share&utm_medium=member_desktop&rcm=ACoAADNPd1sB-NFLC8YAqs_gCNYKfyH3R93XQOE',
+      type: 'article',
+      publishedDate: '2024-10-15'
+    },
+    {
+      id: 'linkedin-2',
+      title: `HariBatikNasional: Celebrating Indonesia's Cultural Heritage`,
+      description:
+        'An article highlighting the significance of traditional batik in Indonesian culture.',
+      url: 'https://www.linkedin.com/posts/devinjnugraha_haribatiknasional-batikday-activity-7247131428742701056-y2qv?utm_source=share&utm_medium=member_desktop&rcm=ACoAADNPd1sB-NFLC8YAqs_gCNYKfyH3R93XQOE',
+      type: 'article',
+      publishedDate: '2024-10-02'
+    },
+    {
+      id: 'linkedin-3',
+      title:
+        'Embracing Effective Communication: Insights from an Exciting Capstone Project',
+      description:
+        'A reflection on the importance of effective communication skills, inspired by a Bangkit capstone project experience.',
+      url: 'https://www.linkedin.com/posts/devinjnugraha_effectivecommunication-capstoneproject-collaborationskills-activity-7072999803621683200-axwK?utm_source=share&utm_medium=member_desktop&rcm=ACoAADNPd1sB-NFLC8YAqs_gCNYKfyH3R93XQOE',
+      type: 'video',
+      publishedDate: '2024-06-04'
     }
   ],
 

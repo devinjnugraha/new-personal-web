@@ -3,44 +3,44 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --font-dm-sans: '';
-    --font-playfair: '';
-    --font-geist-mono: '';
-  }
+    :root {
+        --font-dm-sans: "";
+        --font-playfair: "";
+        --font-geist-mono: "";
+    }
 
-  html {
-    scroll-behavior: smooth;
-  }
+    html {
+        scroll-behavior: smooth;
+    }
 
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #0D0D0D;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #2A2A2A;
-    border-radius: 3px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #3A3A3A;
-  }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #0d0d0d;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #2a2a2a;
+        border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #3a3a3a;
+    }
 
-  /* Selection */
-  ::selection {
-    background-color: #1D9E75;
-    color: #0D0D0D;
-  }
+    /* Selection */
+    ::selection {
+        background-color: #1d9e75;
+        color: #0d0d0d;
+    }
 }
 
 @layer utilities {
-  .section-label {
-    @apply font-mono text-xs uppercase tracking-widest text-ink-muted;
-  }
+    .section-label {
+        @apply font-mono text-xs uppercase tracking-widest text-ink-muted font-bold;
+    }
 
-  .section-title {
-    @apply font-serif text-3xl text-ink leading-tight;
-  }
+    .section-title {
+        @apply font-serif text-3xl text-ink leading-tight;
+    }
 }

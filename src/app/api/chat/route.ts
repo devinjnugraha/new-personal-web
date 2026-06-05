@@ -2,17 +2,17 @@ import { createOpenAI } from '@ai-sdk/openai'
 import { streamText, convertToModelMessages, type UIMessage } from 'ai'
 import { after } from 'next/server'
 import { portfolio } from '@/data/portfolio'
+import { appConfig } from '@/lib/app-config'
 
 export const runtime = 'edge'
 
 const openrouter = createOpenAI({
   baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: process.env.OPENROUTER_API_KEY ?? ''
+  apiKey: appConfig.getOpenRouterApiKey()
 })
 
-const RATE_LIMIT = parseInt(process.env.CHAT_RATE_LIMIT ?? '20', 10)
-const RATE_WINDOW_MS =
-  parseInt(process.env.CHAT_RATE_WINDOW ?? '3600', 10) * 1000
+const RATE_LIMIT = appConfig.getChatRateLimit()
+const RATE_WINDOW_MS = appConfig.getChatRateWindowMs()
 
 const rateStore = new Map<string, number[]>() // ip → array of request timestamps
 
@@ -76,7 +76,7 @@ export async function POST (req: Request) {
     })
   }
 
-  const model = process.env.CHAT_MODEL ?? 'anthropic/claude-haiku-4-5'
+  const model = appConfig.getChatModel()
   const now = new Date()
   const timestamp = now.toLocaleString('en-US', {
     timeZone: 'Asia/Jakarta',
@@ -88,8 +88,8 @@ export async function POST (req: Request) {
     model: openrouter(model),
     system: `[Current timestamp: ${timestamp}]\n\n${portfolio.chat.systemPrompt}`,
     messages: await convertToModelMessages(messages),
-    maxOutputTokens: 500,
-    temperature: 0.7618
+    maxOutputTokens: appConfig.getChatMaxOutputTokens(),
+    temperature: appConfig.getChatTemperature()
   })
 
   // Log chat event after response is sent (non-blocking)

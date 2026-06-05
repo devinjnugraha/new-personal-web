@@ -48,7 +48,7 @@ purple/cartoon aesthetic — this design explicitly moves away from that.
   ├── Education        (#education)   — 02
   ├── Experience       (#experience)  — 03
   ├── Certifications   (#certifications) — 04
-  ├── Writing          (#writing)     — 05
+  ├── Research & Writings (#writing) — 05
   └── Chat             (#chat)        — 06
 [Footer]
 ```
