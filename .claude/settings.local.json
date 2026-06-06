@@ -14,7 +14,9 @@
       "Bash(mv FEAT--hero.md FEAT-003-hero.md)",
       "Bash(mv FEAT--about.md FEAT-004-about.md)",
       "Bash(mv FEAT--education.md FEAT-005-education.md)",
-      "Skill(update-config)"
+      "Skill(update-config)",
+      "Bash(find:*)",
+      "Bash(git add:*)"
     ]
   },
   "outputStyle": "default"

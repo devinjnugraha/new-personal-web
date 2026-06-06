@@ -41,6 +41,7 @@ src/
 docs/
   issues/               — AI-DLC deliverables (one file per issue)
   specs/                — Legacy spec files (SPEC-NNN-feature.md)
+  BACKLOG.md            - List of backlogs
 ```
 
 ---
@@ -91,11 +92,11 @@ docs/issues/{CATEGORY}-NNN-short-name.md
 
 **Allowed categories (only these):**
 
-- `feat` — feature development
-- `fix` — bug fix
-- `perf` — performance optimization
-- `ref` — refactor / code quality
-- `hotfix` — emergency patch
+- `FEAT` — feature development
+- `FIX` — bug fix
+- `PERF` — performance optimization
+- `REF` — refactor / code quality
+- `HOTFIX` — emergency patch
 
 Examples: `fix-001-chat-keyboard.md`, `feat-003-dark-mode.md`, `perf-012-bundle-reduction.md`
 
@@ -172,4 +173,4 @@ Implement tasks in order. For each task:
 3. Bug fixes may skip to Phase 4 only if the fix is a single-line change — but must still be logged in the issue doc
 4. "It's a small change" is not grounds for skipping phases
 5. If you find yourself writing code before the task list exists, stop and go back
-6. If an issue was coming from BACKLOG.md, verify the tasks solved the BACKLOG. If yes, check the backlog item off in `docs/BACKLOG.md`
+6. If an issue was coming from BACKLOG.md, verify the tasks solved the BACKLOG. If yes, check the backlog item off and append `{CATEGORY}-NNN` in the backlog item

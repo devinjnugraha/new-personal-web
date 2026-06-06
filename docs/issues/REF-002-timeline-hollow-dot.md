@@ -1,6 +1,6 @@
 # FEAT-011 — Timeline Last Entry Hollow Dot
 
-**Status:** Complete
+**Status:** Iterated
 **Source:** BACKLOG-011
 **File:** `src/components/ui/Timeline.tsx`
 
@@ -30,6 +30,7 @@ As a **visitor**, I want the last entry in the timeline to have a **hollow dot**
 ## Implementation Notes
 
 - Final styling: `border-ink-muted/40 bg-background` — muted border with page background fill (not transparent). User clarified bg should remain `background`.
+- **Iteration (2026-06-06):** Changed hollow-dot condition from index-based (`index === items.length - 1`) to `endDate`-based. Past experiences (`endDate !== null`) get hollow dots; active/present experiences (`endDate === null`) get accented dots.
 
 *Resolves:* BACKLOG-011
 *References:* FEAT-006-experience.md T-02, Timeline.tsx:19 TODO comment

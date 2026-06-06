@@ -1,4 +1,5 @@
 import { Nav } from '@/components/ui/Nav'
+import { TldrFab } from '@/components/ui/TldrFab'
 import { Hero } from '@/components/sections/Hero'
 import { About } from '@/components/sections/About'
 import { Education } from '@/components/sections/Education'
@@ -46,6 +47,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      <TldrFab />
     </>
   )
 }

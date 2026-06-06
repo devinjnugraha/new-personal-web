@@ -23,37 +23,41 @@ export function Certifications() {
                 key={cert.id}
                 className="rounded-lg p-5 bg-background-surface border border-accent hover:border-accent/80 transition-colors"
               >
-                {cert.badgeUrl && (
-                  <div className="mb-3">
-                    <Image
-                      src={cert.badgeUrl}
-                      alt={cert.name}
-                      width={48}
-                      height={48}
-                      unoptimized
-                      className="h-12 w-auto object-contain"
-                    />
+                <div className="flex flex-row md:flex-col gap-3 md:gap-0">
+                  {cert.badgeUrl && (
+                    <div className="shrink-0 md:mb-3">
+                      <Image
+                        src={cert.badgeUrl}
+                        alt={cert.name}
+                        width={48}
+                        height={48}
+                        unoptimized
+                        className="h-12 w-auto object-contain"
+                      />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-ink font-medium text-sm leading-snug">{cert.name}</p>
+                    <p className="text-ink-muted text-xs font-mono mt-1">
+                      {cert.issuer} · {cert.year}
+                    </p>
+                    <div className="flex flex-wrap gap-1 mt-3">
+                      {cert.skills.slice(0, 3).map((s) => (
+                        <Badge key={s}>{s}</Badge>
+                      ))}
+                    </div>
+                    {cert.credentialUrl && (
+                      <a
+                        href={cert.credentialUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-accent text-xs font-mono hover:underline mt-3 inline-block"
+                      >
+                        verify ↗
+                      </a>
+                    )}
                   </div>
-                )}
-                <p className="text-ink font-medium text-sm leading-snug">{cert.name}</p>
-                <p className="text-ink-muted text-xs font-mono mt-1">
-                  {cert.issuer} · {cert.year}
-                </p>
-                <div className="flex flex-wrap gap-1 mt-3">
-                  {cert.skills.slice(0, 3).map((s) => (
-                    <Badge key={s}>{s}</Badge>
-                  ))}
                 </div>
-                {cert.credentialUrl && (
-                  <a
-                    href={cert.credentialUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-accent text-xs font-mono hover:underline mt-3 inline-block"
-                  >
-                    verify ↗
-                  </a>
-                )}
               </div>
             ))}
           </div>

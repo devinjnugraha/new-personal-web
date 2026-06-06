@@ -282,14 +282,16 @@ export function ChatInterface() {
         <>
             {/* Normal section view (desktop + mobile collapsed) */}
             <section id="chat" className={`py-section border-t border-border${isExpanded ? " invisible" : ""}`}>
-                <p className="section-label mb-2">06 / ask devin</p>
+                <p className="section-label mb-2">06 / TL;DR</p>
                 <p className="text-ink-muted text-sm mb-6">
-                    Devin&apos;s personal assistant, powered by an LLM.{" "}
-                    <span className="text-ink-faint">Only answers from the knowledge base.</span>
+                    Ask my assistant powered by LLM.{" "}
+                    <span className="text-ink-faint">It reads everything on this page so you don&apos;t have to.</span>
                 </p>
 
                 <div className="border border-border rounded-lg bg-background-surface overflow-hidden">
-                    <div ref={desktopScrollRef} className="h-96 overflow-y-auto p-4 space-y-4">{renderMessages(false)}</div>
+                    <div ref={desktopScrollRef} className="h-96 overflow-y-auto p-4 space-y-4">
+                        {renderMessages(false)}
+                    </div>
                     <form onSubmit={handleSubmit} className="border-t border-border flex items-end gap-0">
                         <textarea
                             ref={inputRef}
@@ -333,7 +335,7 @@ export function ChatInterface() {
                         {/* Header */}
                         <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
                             <div>
-                                <p className="section-label mb-0">ask devin</p>
+                                <p className="section-label mb-0">tl;dr</p>
                                 <p className="text-ink-faint text-xs mt-0.5">AI assistant</p>
                             </div>
                             <button
@@ -345,7 +347,9 @@ export function ChatInterface() {
                         </div>
 
                         {/* Messages — flex-1 fills space between header and input */}
-                        <div ref={overlayScrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">{renderMessages(true)}</div>
+                        <div ref={overlayScrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
+                            {renderMessages(true)}
+                        </div>
 
                         {/* Input pinned to bottom (above keyboard) */}
                         <div className="shrink-0" style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>

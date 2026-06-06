@@ -17,10 +17,10 @@ export function Timeline({ items }: TimelineProps) {
 
             {items.map((item, index) => (
                 <div key={item.id} className="relative pl-8">
-                    {/* Timeline dot — last entry is hollow to signal end */}
+                    {/* Timeline dot — hollow for past, accented for active (endDate === null) */}
                     <div
                         className={`absolute left-0 top-1.5 w-4 h-4 rounded-full border-2 ${
-                            index === items.length - 1
+                            item.endDate !== null
                                 ? 'border-ink-muted/40 bg-background'
                                 : 'border-accent bg-background'
                         }`}

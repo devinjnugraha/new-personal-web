@@ -13,7 +13,7 @@ const NAV_ITEMS = [
   { id: 'experience', label: '03 experience' },
   { id: 'certifications', label: '04 certs' },
   { id: 'writing', label: '05 research' },
-  { id: 'chat', label: '06 ask' },
+  { id: 'chat', label: '06 tl;dr' },
 ] as const
 
 export function Nav() {
