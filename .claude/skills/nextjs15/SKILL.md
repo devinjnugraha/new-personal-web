@@ -36,14 +36,14 @@ export async function generateMetadata({
 ## Async cookies and headers
 
 ```typescript
-import { cookies, headers } from 'next/headers'
+import { cookies, headers } from "next/headers";
 
 // In Server Component or Route Handler:
-const cookieStore = await cookies()
-const token = cookieStore.get('token')?.value
+const cookieStore = await cookies();
+const token = cookieStore.get("token")?.value;
 
-const heads = await headers()
-const ip = heads.get('x-forwarded-for')
+const heads = await headers();
+const ip = heads.get("x-forwarded-for");
 ```
 
 ---
@@ -52,15 +52,15 @@ const ip = heads.get('x-forwarded-for')
 
 ```typescript
 // src/app/api/example/route.ts
-export const runtime = 'edge' // optional but recommended
+export const runtime = "edge"; // optional but recommended
 
 export async function GET(_req: Request) {
-  return Response.json({ ok: true })
+    return Response.json({ ok: true });
 }
 
 export async function POST(req: Request) {
-  const body = await req.json()
-  return Response.json({ received: body })
+    const body = await req.json();
+    return Response.json({ received: body });
 }
 ```
 
@@ -86,6 +86,7 @@ export default function ClientComp() {
 ```
 
 **Rules:**
+
 - Server Components can import Client Components ✅
 - Client Components CANNOT import Server Components — pass as `children` prop instead
 - `'use client'` marks the boundary; all imports below it are also client-side
@@ -113,13 +114,13 @@ const dmSans = DM_Sans({
 ## Metadata
 
 ```typescript
-import type { Metadata } from 'next'
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Page Title',
-  description: 'Page description',
-  openGraph: { title: 'OG Title', description: '...', type: 'website' },
-}
+    title: "Page Title",
+    description: "Page description",
+    openGraph: { title: "OG Title", description: "...", type: "website" },
+};
 ```
 
 ---
@@ -147,13 +148,13 @@ export async function POST(req: Request) {
 
 ```typescript
 // NOT cached by default (changed in v15):
-const data = await fetch('https://api.example.com/data')
+const data = await fetch("https://api.example.com/data");
 
 // Cached indefinitely (opt-in):
-const data = await fetch(url, { cache: 'force-cache' })
+const data = await fetch(url, { cache: "force-cache" });
 
 // Revalidate every hour:
-const data = await fetch(url, { next: { revalidate: 3600 } })
+const data = await fetch(url, { next: { revalidate: 3600 } });
 ```
 
 ---
@@ -167,3 +168,20 @@ const data = await fetch(url, { next: { revalidate: 3600 } })
 
 Turbopack is stable in Next.js 15 for development. Do NOT use `--turbopack`
 in the `build` script — Webpack is still used for production builds.
+
+---
+
+## Critical Next.js 15 Rules
+
+```typescript
+// params and searchParams are Promises
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+}
+
+// cookies() and headers() are async
+const cookieStore = await cookies();
+
+// fetch() is NOT cached by default — opt in explicitly
+fetch(url, { next: { revalidate: 3600 } });
+```

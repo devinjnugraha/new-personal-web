@@ -39,7 +39,7 @@ src/
   lib/utils.ts          — cn() and shared utilities
   types/index.ts        — Shared TypeScript types
 docs/
-  iterations/           — AI-DLC deliverables (one file per iteration)
+  issues/               — AI-DLC deliverables (one file per issue)
   specs/                — Legacy spec files (SPEC-NNN-feature.md)
 ```
 
@@ -68,34 +68,6 @@ docs/
 
 ---
 
-## Critical Next.js 15 Rules
-
-```typescript
-// params and searchParams are Promises
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params;
-}
-
-// cookies() and headers() are async
-const cookieStore = await cookies();
-
-// fetch() is NOT cached by default — opt in explicitly
-fetch(url, { next: { revalidate: 3600 } });
-```
-
----
-
-## Environment Variables
-
-| Variable                 | Required | Description                                     |
-| ------------------------ | -------- | ----------------------------------------------- |
-| `OPENROUTER_API_KEY`     | Yes      | OpenRouter API key                              |
-| `CHAT_MODEL`             | Yes      | Model string e.g. `anthropic/claude-sonnet-4-6` |
-| `CHAT_MAX_OUTPUT_TOKENS` | No       | Max tokens (default: `1000`)                    |
-| `CHAT_TEMPERATURE`       | No       | Temperature (default: `0.7618`)                 |
-
----
-
 ## ⚠️ AI-DLC Methodology — MANDATORY FOR EVERY REQUEST
 
 **This is not optional.** Every request — including small ones — MUST follow this process
@@ -109,12 +81,30 @@ the current one and receiving explicit human approval.
         ↑ human approval     ↑ human approval    ↑ human approval
 ```
 
-### Where Deliverables Live
+### Doc Naming Convention
 
-Every iteration has a **single living document** at:
+All issue documents follow this format:
 
 ```
-docs/iterations/FEAT-NNN-short-name.md
+docs/issues/{CATEGORY}-NNN-short-name.md
+```
+
+**Allowed categories (only these):**
+
+- `feat` — feature development
+- `fix` — bug fix
+- `perf` — performance optimization
+- `ref` — refactor / code quality
+- `hotfix` — emergency patch
+
+Examples: `fix-001-chat-keyboard.md`, `feat-003-dark-mode.md`, `perf-012-bundle-reduction.md`
+
+### Where Deliverables Live
+
+Every issue has a **single living document** at:
+
+```
+docs/issues/{CATEGORY}-NNN-short-name.md
 ```
 
 This file is **created in Phase 1** and appended to as each phase completes.
@@ -124,11 +114,11 @@ It is the authoritative record of requirements, design decisions, and implementa
 
 ### Phase 1 — Spec
 
-**Do this before anything else.** Create `docs/iterations/FEAT-NNN-short-name.md` and write:
+**Do this before anything else.** Create `docs/issues/{CATEGORY}-NNN-short-name.md` and write:
 
 - Agile user stories: `As a [user], I want [goal] so that [benefit]`
 - Given-When-Then acceptance criteria for each story — testable and unambiguous
-- Explicit scope boundary: what is out of scope for this request
+- Explicit scope boundary: what is out of scope for this issue
 
 Present output. **Wait for human approval before proceeding.**
 
@@ -136,7 +126,7 @@ Present output. **Wait for human approval before proceeding.**
 
 ### Phase 2 — Design
 
-**Do not write code yet.** Append to `docs/iterations/FEAT-NNN-short-name.md`:
+**Do not write code yet.** Append to `docs/issues/{CATEGORY}-NNN-short-name.md`:
 
 - TypeScript type definitions and data models with field-level annotations
 - Component or module responsibilities — which file owns what
@@ -149,7 +139,7 @@ Present output. **Wait for human approval before proceeding.**
 
 ### Phase 3 — Task List
 
-**Do not write code yet.** Append to `docs/iterations/FEAT-NNN-short-name.md`:
+**Do not write code yet.** Append to `docs/issues/{CATEGORY}-NNN-short-name.md`:
 
 - A numbered, sequenced list of discrete tasks
 - A task must have a single goal. Decompose larger tasks into smaller tasks
@@ -166,20 +156,20 @@ Present output. **Wait for human approval before proceeding.**
 Implement tasks in order. For each task:
 
 1. Write code satisfying the task requirement
-2. Check it off in `docs/iterations/FEAT-NNN-short-name.md`
+2. Check it off in `docs/issues/{CATEGORY}-NNN-short-name.md`
 3. Run `npm run type-check` after every logical group of changes
-4. Assess whether the iteration needs to be verified through `npm run build` and ask human approval before build test. Default to skip build test. Do not always ask for build test
-5. Record deviations from the design under `## Implementation Notes` in the iteration doc
+4. Assess whether the issue needs to be verified through `npm run build` and ask human approval before build test. Default to skip build test. Do not always ask for build test
+5. Record deviations from the design under `## Implementation Notes` in the issue doc
 
-**If requirements change mid-cycle**, stop, update the iteration doc, and restart from Phase 1.
+**If requirements change mid-cycle**, stop, update the issue doc, and restart from Phase 1.
 
 ---
 
 ### Enforcement Rules
 
 1. No file may be created or modified before Phase 3 is approved
-2. `docs/iterations/FEAT-NNN-short-name.md` must exist before any code runs
-3. Bug fixes may skip to Phase 4 only if the fix is a single-line change — but must still be logged in the iteration doc
+2. `docs/issues/{CATEGORY}-NNN-short-name.md` must exist before any code runs
+3. Bug fixes may skip to Phase 4 only if the fix is a single-line change — but must still be logged in the issue doc
 4. "It's a small change" is not grounds for skipping phases
 5. If you find yourself writing code before the task list exists, stop and go back
-6. If an iteration was coming from BACKLOG.md, verify the tasks solved the BACKLOG. If yes, check the backlog off in `docs/BACKLOG.md`
+6. If an issue was coming from BACKLOG.md, verify the tasks solved the BACKLOG. If yes, check the backlog item off in `docs/BACKLOG.md`
