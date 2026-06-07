@@ -15,7 +15,7 @@ export function Timeline({ items }: TimelineProps) {
             {/* Vertical line */}
             <div className="absolute left-2 top-2 bottom-2 w-px bg-border" aria-hidden="true" />
 
-            {items.map((item, index) => (
+            {items.map((item) => (
                 <div key={item.id} className="relative pl-8">
                     {/* Timeline dot — hollow for past, accented for active (endDate === null) */}
                     <div

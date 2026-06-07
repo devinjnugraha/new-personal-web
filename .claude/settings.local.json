@@ -16,7 +16,13 @@
       "Bash(mv FEAT--education.md FEAT-005-education.md)",
       "Skill(update-config)",
       "Bash(find:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(bash:*)",
+      "Bash(cat \"C:/Users/devin/Documents/Data/03-apps/new-personal-web/.superpowers/brainstorm/\"*/state/server-info)",
+      "Bash(find /tmp -path \"*/brainstorm/*/state/server-info\" -exec cat {} \\\\;)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(git:*)"
     ]
   },
   "outputStyle": "default"

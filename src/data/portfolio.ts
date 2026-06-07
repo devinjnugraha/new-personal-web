@@ -418,19 +418,19 @@ been working at the intersection of software engineering and applied machine lea
   projects: [
     {
       title: 'Personal Portfolio',
-      image: '/placeholder-project.svg',
-      url: 'https://github.com/devinjnugraha',
+      image: '/portfolio.png',
+      url: 'https://github.com/devinjnugraha'
     },
     {
       title: 'Glaucoma Detection CNN',
-      image: '/placeholder-project.svg',
-      url: 'https://www.sciencedirect.com/science/article/abs/pii/S0010482525012260',
+      image: '/glaucoma.png',
+      url: 'https://www.sciencedirect.com/science/article/abs/pii/S0010482525012260'
     },
     {
       title: 'Stock Monitoring Dashboard',
-      image: '/placeholder-project.svg',
-      url: '#',
-    },
+      image: '/stockbro.png',
+      url: '#'
+    }
   ],
 
   skills: {

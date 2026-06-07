@@ -1,7 +1,7 @@
 import type { PortfolioData } from '@/types'
 
 export function generateSchema(data: PortfolioData, siteUrl: string) {
-  const { person, links, education, experience, certifications, publications, skills } = data
+  const { person, links, education, certifications, publications, skills } = data
 
   const allSkills = [
     ...skills.languages,
