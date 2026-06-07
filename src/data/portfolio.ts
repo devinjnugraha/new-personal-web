@@ -415,6 +415,23 @@ been working at the intersection of software engineering and applied machine lea
       publishedDate: '2024-06-04'
     }
   ],
+  projects: [
+    {
+      title: 'Personal Portfolio',
+      image: '/placeholder-project.svg',
+      url: 'https://github.com/devinjnugraha',
+    },
+    {
+      title: 'Glaucoma Detection CNN',
+      image: '/placeholder-project.svg',
+      url: 'https://www.sciencedirect.com/science/article/abs/pii/S0010482525012260',
+    },
+    {
+      title: 'Stock Monitoring Dashboard',
+      image: '/placeholder-project.svg',
+      url: '#',
+    },
+  ],
 
   skills: {
     languages: ['Python', 'TypeScript', 'JavaScript', 'Java'],

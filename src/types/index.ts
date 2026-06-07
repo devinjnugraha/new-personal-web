@@ -138,6 +138,14 @@ export interface Writing {
   publishedDate?: string
 }
 
+// ─── Projects ──────────────────────────────────────────────────────────────────
+
+export interface Project {
+  title: string
+  image: string  // URL to 5:3 landscape screenshot
+  url: string    // external project link (target _blank)
+}
+
 // ─── Skills ──────────────────────────────────────────────────────────────────
 
 export interface Skills {
@@ -166,6 +174,7 @@ export interface PortfolioData {
   achievements: Achievement[]
   publications: Publication[]
   writings: Writing[]
+  projects: Project[]
   skills: Skills
   chat: ChatConfig
 }
