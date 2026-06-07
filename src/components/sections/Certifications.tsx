@@ -12,7 +12,7 @@ export function Certifications() {
 
   return (
     <section id="certifications" className="py-section border-t border-border">
-      <p className="section-label mb-8">04 / certifications & achievements</p>
+      <p className="section-label mb-8">05 / certifications & achievements</p>
 
       {featured.length > 0 && (
         <>

@@ -11,9 +11,10 @@ const NAV_ITEMS = [
   { id: 'about', label: '01 about' },
   { id: 'education', label: '02 education' },
   { id: 'experience', label: '03 experience' },
-  { id: 'certifications', label: '04 certs' },
-  { id: 'writing', label: '05 research' },
-  { id: 'chat', label: '06 tl;dr' },
+  { id: 'projects', label: '04 projects' },
+  { id: 'certifications', label: '05 certs' },
+  { id: 'writing', label: '06 research' },
+  { id: 'chat', label: '07 tl;dr' },
 ] as const
 
 export function Nav() {
