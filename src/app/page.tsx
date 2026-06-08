@@ -1,12 +1,8 @@
 import { Nav } from '@/components/ui/Nav'
-import { TldrFab } from '@/components/ui/TldrFab'
 import { Hero } from '@/components/sections/Hero'
 import { About } from '@/components/sections/About'
-import { Education } from '@/components/sections/Education'
-import { Experience } from '@/components/sections/Experience'
-import { Projects } from '@/components/sections/Projects'
-import { Certifications } from '@/components/sections/Certifications'
-import { Writing } from '@/components/sections/Writing'
+import { Work } from '@/components/sections/Experience'
+import { Proof } from '@/components/sections/Certifications'
 import { ChatInterface } from '@/components/sections/ChatInterface'
 import { portfolio } from '@/data/portfolio'
 import { generateSchema } from '@/lib/schema'
@@ -25,11 +21,8 @@ export default function Home() {
       <main className="mx-auto max-w-content px-6">
         <Hero />
         <About />
-        <Education />
-        <Experience />
-        <Projects />
-        <Certifications />
-        <Writing />
+        <Work />
+        <Proof />
         <ChatInterface />
       </main>
       <footer className="mx-auto max-w-content px-6 py-16 border-t border-border mt-8">
@@ -49,7 +42,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-      <TldrFab />
     </>
   )
 }
