@@ -133,10 +133,10 @@ export function ChatInterface() {
     }, [messages]);
 
     const starterPrompts = [
-        "Tell me about Devin's ML research",
-        "What tech stack does Devin work with?",
-        "What are Devin's certifications?",
-        "Tell me about Devin's glaucoma detection paper",
+        "What makes Devin different from other devs?",
+        "Tell me about the glaucoma paper",
+        "What's Devin's tech stack?",
+        "Is Devin certified?",
     ];
 
     const MAX_INPUT_LENGTH = 500;
@@ -282,10 +282,12 @@ export function ChatInterface() {
         <>
             {/* Normal section view (desktop + mobile collapsed) */}
             <section id="chat" className={`py-section border-t border-border${isExpanded ? " invisible" : ""}`}>
-                <p className="section-label mb-2">06 / TL;DR</p>
-                <p className="text-ink-muted text-sm mb-6">
-                    Ask my assistant powered by LLM.{" "}
-                    <span className="text-ink-faint">It reads everything on this page so you don&apos;t have to.</span>
+                <p className="section-label mb-2">04 / still reading?</p>
+                <p className="text-ink-muted text-sm mb-2">
+                  You could&apos;ve just asked. This is Devin&apos;s AI assistant — it knows everything on this page and a bit more.
+                </p>
+                <p className="text-ink-faint text-xs mb-6">
+                  Ask about skills, experience, research, certifications, or anything else.
                 </p>
 
                 <div className="border border-border rounded-lg bg-background-surface overflow-hidden">
