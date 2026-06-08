@@ -291,6 +291,30 @@ been working at the intersection of software engineering and applied machine lea
     tools: ['Git', 'Docker', 'Vercel', 'Google Cloud', 'Jupyter']
   },
 
+  strengths: [
+    {
+      id: 'fullstack',
+      heading: 'I build full-stack apps',
+      description:
+        'React on the frontend, Spring Boot on the backend, deployed before the deadline.',
+      skills: ['React', 'Next.js', 'Spring Boot', 'REST APIs', 'TypeScript'],
+    },
+    {
+      id: 'ml-research',
+      heading: 'I do ML research',
+      description:
+        'Published a paper on CNN optimization for glaucoma detection in a Q1 journal. The model sees better than most humans.',
+      skills: ['TensorFlow', 'CNN', 'Grad-CAM', 'PyTorch', 'Scikit-learn'],
+    },
+    {
+      id: 'fast-learner',
+      heading: 'I learn fast',
+      description:
+        'Finished a 4-year CS degree in 3.5 years. Picked up AWS and TensorFlow certs along the way.',
+      skills: ['AWS', 'TensorFlow', 'Python', 'Docker', 'Google Cloud'],
+    },
+  ],
+
   chat: {
     systemPrompt: '' // populated below after portfolio is fully defined
   }

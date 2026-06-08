@@ -146,6 +146,15 @@ export interface Project {
   url: string    // external project link (target _blank)
 }
 
+// ─── Strength Cards ──────────────────────────────────────────────────────────
+
+export interface StrengthCard {
+  id: string
+  heading: string
+  description: string
+  skills: string[]
+}
+
 // ─── Skills ──────────────────────────────────────────────────────────────────
 
 export interface Skills {
@@ -176,6 +185,7 @@ export interface PortfolioData {
   writings: Writing[]
   projects: Project[]
   skills: Skills
+  strengths: StrengthCard[]
   chat: ChatConfig
 }
 
