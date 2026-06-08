@@ -9,12 +9,9 @@ import { portfolio } from '@/data/portfolio'
 
 const NAV_ITEMS = [
   { id: 'about', label: '01 about' },
-  { id: 'education', label: '02 education' },
-  { id: 'experience', label: '03 experience' },
-  { id: 'projects', label: '04 projects' },
-  { id: 'certifications', label: '05 certs' },
-  { id: 'writing', label: '06 research' },
-  { id: 'chat', label: '07 tl;dr' },
+  { id: 'work', label: '02 work' },
+  { id: 'proof', label: '03 proof' },
+  { id: 'chat', label: '04 chat' },
 ] as const
 
 export function Nav() {
