@@ -5,11 +5,9 @@ export const portfolio: PortfolioData = {
   person: {
     name: 'Devin Jaya Nugraha',
     initials: 'DJN',
-    tagline: 'Software Developer · Certified TensorFlow Developer',
-    bio: `I'm a software developer with a passion for intelligent computing and data-driven systems.
-My background spans ML research — including a published paper on CNN optimization for medical imaging —
-and full-stack web development. I graduated from Brawijaya University in 3.5 years and have since
-been working at the intersection of software engineering and applied machine learning.`,
+    tagline: 'Software Developer · ML Researcher · Professional Overthinker',
+    bio: `Full-stack developer and ML researcher based in Indonesia.
+Published in a Q1 journal, certified by AWS and Google, and currently building things for the financial sector.`,
     location: 'Indonesia',
     availability: 'Open to opportunities'
   },
