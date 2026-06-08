@@ -1,20 +1,23 @@
-// SPEC: docs/specs/SPEC-006-experience.md
 // Type: Server Component
 
 import { portfolio } from '@/data/portfolio'
 import { Timeline } from '@/components/ui/Timeline'
+import { ProjectCarousel } from '@/components/sections/ProjectCarousel'
 
-export function Experience() {
-  const { experience } = portfolio
-  // TODO: Full implementation per SPEC-006 (see docs/iterations/FEAT-006-experience.md)
-  // Requirements:
-  //   - Vertical timeline layout using Timeline component
-  //   - Each entry: role, org, date range, highlights as bullet points
-  //   - Skill tags per entry
+export function Work() {
+  const { experience, projects } = portfolio
+
   return (
-    <section id="experience" className="py-section border-t border-border">
-      <p className="section-label mb-8">03 / experience</p>
+    <section id="work" className="py-section border-t border-border">
+      <p className="section-label mb-8">02 / work</p>
       <Timeline items={experience} />
+
+      {projects.length > 0 && (
+        <>
+          <p className="section-label mt-12 mb-6">projects</p>
+          <ProjectCarousel projects={projects} />
+        </>
+      )}
     </section>
   )
 }
