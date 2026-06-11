@@ -3,6 +3,9 @@ import { streamText, convertToModelMessages, type UIMessage } from 'ai'
 import { after } from 'next/server'
 import { portfolio } from '@/data/portfolio'
 import { appConfig } from '@/lib/app-config'
+import { db } from '@/db/client'
+import { chatSessions, chatMessages } from '@/db/schema'
+import { eq } from 'drizzle-orm'
 
 export const runtime = 'edge'
 
@@ -40,6 +43,12 @@ function checkRateLimit (ip: string): { allowed: boolean; remaining: number } {
   return { allowed: true, remaining: RATE_LIMIT - timestamps.length }
 }
 
+interface ChatRequestBody {
+  messages: UIMessage[]
+  chatId?: string
+  fingerprint?: string
+}
+
 export async function POST (req: Request) {
   // Rate limiting
   const ip =
@@ -65,10 +74,14 @@ export async function POST (req: Request) {
 
   // Parse request
   let messages: UIMessage[]
+  let chatId: string
+  let fingerprint: string
   try {
-    const body = await req.json()
+    const body: ChatRequestBody = await req.json()
     messages = body.messages
     if (!Array.isArray(messages)) throw new Error('Invalid messages')
+    chatId = body.chatId ?? crypto.randomUUID()
+    fingerprint = body.fingerprint ?? 'unknown'
   } catch {
     return new Response(JSON.stringify({ error: 'Invalid request body' }), {
       status: 400,
@@ -92,21 +105,50 @@ export async function POST (req: Request) {
     temperature: appConfig.getChatTemperature()
   })
 
-  // Log chat event after response is sent (non-blocking)
+  // Persist chat data after response is sent (non-blocking)
+  const sessionId = chatId
   after(async () => {
-    const msgSummary = messages.map(m => ({
-      role: m.role,
-      text: m.parts
+    try {
+      // Create session if it doesn't exist yet
+      const existing = await db.select({ id: chatSessions.id })
+        .from(chatSessions)
+        .where(eq(chatSessions.id, sessionId))
+        .limit(1)
+
+      if (existing.length === 0) {
+        await db.insert(chatSessions).values({
+          id: sessionId,
+          fingerprint,
+          ip
+        })
+      }
+
+      // Extract last user message text
+      const lastUserMsg = messages.filter(m => m.role === 'user').pop()
+      const userText = lastUserMsg?.parts
         ?.filter(p => p.type === 'text')
         .map(p => p.text)
-        .join('')
-        .slice(0, 80)
-    }))
-    console.log(
-      `[chat] ip=${ip} count=${
-        messages.length
-      } remaining=${remaining} messages=${JSON.stringify(msgSummary)}`
-    )
+        .join('') ?? ''
+
+      // Get full assistant response
+      const assistantText = await result.text
+
+      // Insert both messages
+      await db.insert(chatMessages).values([
+        {
+          chatId: sessionId,
+          role: 'user',
+          content: userText
+        },
+        {
+          chatId: sessionId,
+          role: 'assistant',
+          content: assistantText
+        }
+      ])
+    } catch (err) {
+      console.error('[chat-db] Failed to persist messages:', err)
+    }
   })
 
   return result.toUIMessageStreamResponse({

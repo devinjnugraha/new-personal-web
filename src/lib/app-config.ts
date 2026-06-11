@@ -14,6 +14,11 @@ export const appConfig = {
         return process.env.OPENROUTER_API_KEY ?? "";
     },
 
+    // Database
+    getDatabaseUrl(): string {
+        return process.env.DATABASE_URL ?? "";
+    },
+
     // Chat
     getChatModel(): string {
         return process.env.CHAT_MODEL ?? "anthropic/claude-haiku-4-5";

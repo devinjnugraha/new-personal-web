@@ -12,6 +12,37 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "motion/react";
 
+const CHAT_ID_KEY = "portfolio-chat-id";
+
+function generateFingerprint(): string {
+    const components = [
+        navigator.userAgent,
+        String(screen.width),
+        String(screen.height),
+        Intl.DateTimeFormat().resolvedOptions().timeZone,
+    ];
+    const raw = components.join("|");
+    let hash = 0;
+    for (let i = 0; i < raw.length; i++) {
+        const char = raw.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return Math.abs(hash).toString(36);
+}
+
+function getOrCreateChatId(): string {
+    try {
+        const existing = localStorage.getItem(CHAT_ID_KEY);
+        if (existing) return existing;
+    } catch { /* localStorage unavailable */ }
+    const id = crypto.randomUUID();
+    try {
+        localStorage.setItem(CHAT_ID_KEY, id);
+    } catch { /* ignore */ }
+    return id;
+}
+
 // Auto-link bare URLs in markdown text so ReactMarkdown renders them as <a>
 function autolinkMarkdown(text: string): string {
     return text.replace(/(?<!\()(https?:\/\/[^\s)\]>]+)/g, "[$1]($1)");
@@ -31,6 +62,15 @@ function getMessageText(message: UIMessage): string {
 const chatTransport = new DefaultChatTransport({ api: "/api/chat" });
 
 export function ChatInterface() {
+    const [fingerprint, setFingerprint] = useState("");
+    const [chatId, setChatId] = useState("");
+
+    // Generate fingerprint and chatId after mount (browser-only APIs)
+    useEffect(() => {
+        setFingerprint(generateFingerprint());
+        setChatId(getOrCreateChatId());
+    }, []);
+
     const { messages, sendMessage, status, error } = useChat({
         transport: chatTransport,
         onFinish: () => {
@@ -146,7 +186,7 @@ export function ChatInterface() {
         const text = input.trim();
         if (!text || isLoading) return;
         if (text.length > MAX_INPUT_LENGTH) return;
-        sendMessage({ text });
+        sendMessage({ text }, { body: { chatId, fingerprint } });
         setInput("");
         if (inputRef.current) {
             inputRef.current.style.height = "auto";
@@ -168,7 +208,7 @@ export function ChatInterface() {
         if (isMobile) {
             setIsExpanded(true);
         }
-        sendMessage({ text: prompt });
+        sendMessage({ text: prompt }, { body: { chatId, fingerprint } });
     };
 
     const handleInputFocus = useCallback(() => {
