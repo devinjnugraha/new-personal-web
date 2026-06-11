@@ -47,7 +47,7 @@ export function Proof() {
       {/* Certifications */}
       <p className="section-label mb-4">certifications</p>
       {featured.length > 0 && (
-        <div className={`grid grid-cols-1 ${colClass} gap-4 mb-12`}>
+        <div className={`grid grid-cols-1 ${colClass} gap-4 mb-4`}>
           {featured.map((cert) => (
             <div
               key={cert.id}
