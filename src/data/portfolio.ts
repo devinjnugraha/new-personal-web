@@ -182,6 +182,17 @@ Published in a Q1 journal, certified by AWS and Google, and currently building t
       featured: false,
       badgeUrl:
         'https://images.credly.com/size/160x160/images/efbdc0d6-b46e-4e3c-8cf8-2314d8a5b971/GCC_badge_python_1000x1000.png'
+    },
+    {
+      id: 'google-it-python',
+      name: 'Google IT Automation with Python',
+      issuer: 'Google',
+      year: 2022,
+      credentialUrl: '',
+      skills: ['Python', 'Automation', 'Git', 'Regex', 'Cloud'],
+      featured: false,
+      badgeUrl:
+        'https://images.credly.com/size/160x160/images/efbdc0d6-b46e-4e3c-8cf8-2314d8a5b971/GCC_badge_python_1000x1000.png'
     }
   ],
 
@@ -295,22 +306,36 @@ Published in a Q1 journal, certified by AWS and Google, and currently building t
       heading: 'I build full-stack apps',
       description:
         'React on the frontend, Spring Boot on the backend, deployed before the deadline.',
-      skills: ['React', 'Next.js', 'Spring Boot', 'REST APIs', 'TypeScript'],
+      skills: ['React', 'Next.js', 'Spring Boot', 'REST APIs', 'TypeScript']
     },
     {
       id: 'ml-research',
       heading: 'I do ML research',
       description:
         'Published a paper on CNN optimization for glaucoma detection in a Q1 journal. The model sees better than most humans.',
-      skills: ['TensorFlow', 'CNN', 'Grad-CAM', 'PyTorch', 'Scikit-learn'],
+      skills: ['TensorFlow', 'CNN', 'Grad-CAM', 'PyTorch', 'Scikit-learn']
     },
     {
       id: 'fast-learner',
       heading: 'I learn fast',
       description:
         'Finished a 4-year CS degree in 3.5 years. Picked up AWS and TensorFlow certs along the way.',
-      skills: ['AWS', 'TensorFlow', 'Python', 'Docker', 'Google Cloud'],
+      skills: ['AWS', 'TensorFlow', 'Python', 'Docker', 'Google Cloud']
     },
+    {
+      id: 'test',
+      heading: 'Test',
+      description:
+        'This is a test strength card to check layout and styling consistency across different content lengths. It should look good even with more or less text than the other cards.',
+      skills: ['AWS', 'TensorFlow', 'Python', 'Docker', 'Google Cloud']
+    },
+    {
+      id: 'second-test',
+      heading: 'Second Test',
+      description:
+        'Another test strength card to further ensure that the design can handle multiple entries without breaking the layout or visual balance of the page.',
+      skills: ['AWS', 'TensorFlow', 'Python', 'Docker', 'Google Cloud']
+    }
   ],
 
   chat: {

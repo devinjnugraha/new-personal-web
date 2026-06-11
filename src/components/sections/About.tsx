@@ -9,11 +9,11 @@ export function About() {
   return (
     <section id="about" className="py-section border-t border-border">
       <p className="section-label mb-8">01 / about</p>
-      <div className="flex flex-wrap justify-center gap-6">
+      <div className="flex flex-wrap gap-6">
         {strengths.map((card) => (
           <div
             key={card.id}
-            className="w-full md:w-[calc(33.333%-1rem)] rounded-lg border border-border p-6 hover:border-accent/50 transition-colors"
+            className="w-full grow md:w-[calc(33.333%-1rem)] rounded-lg border border-border p-6 hover:border-accent/50 transition-colors"
           >
             <h3 className="font-serif text-lg text-ink mb-2">{card.heading}</h3>
             <p className="text-ink-muted text-sm leading-relaxed mb-4">
