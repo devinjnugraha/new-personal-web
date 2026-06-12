@@ -97,10 +97,17 @@ export async function POST (req: Request) {
     timeStyle: 'short'
   })
 
+  const modelMessages = await convertToModelMessages(messages)
+  console.log('SYSTEM')
+  console.log(portfolio.chat.systemPrompt)
+  
+  console.log('MESSAGES')
+  console.dir(modelMessages, { depth: null })
+  
   const result = streamText({
     model: openrouter(model),
     system: `[Current timestamp: ${timestamp}]\n\n${portfolio.chat.systemPrompt}`,
-    messages: await convertToModelMessages(messages),
+    messages: modelMessages,
     maxOutputTokens: appConfig.getChatMaxOutputTokens(),
     temperature: appConfig.getChatTemperature()
   })
